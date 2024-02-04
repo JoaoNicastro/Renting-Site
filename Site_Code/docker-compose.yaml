@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    image: node:14
+    container_name: ejs-app
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8080:8080"
+    command: sh -c "npm install && node server.js"
+
+networks:
+  default:
+    name: ejs-network
+    external: true
