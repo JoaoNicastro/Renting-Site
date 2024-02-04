@@ -1,4 +1,5 @@
-version: '3'
+version: '3.9'
+
 services:
   web:
     image: node:14
@@ -7,8 +8,8 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - "8080:8080"
-    command: sh -c "npm install && node server.js"
+      - "3000:3000"
+    command: sh -c "npm install && node server.js"  # Assuming your entry point file is server.js
 
 networks:
   default:

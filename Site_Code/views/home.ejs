@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add any additional CSS files or stylesheets here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+        }
+
+        main {
+            padding: 2em;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-dark text-white">
+        <h1>Your Website</h1>
+    </header>
+
+    <main class="container mt-4">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="about-tab" data-toggle="tab" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="services-tab" data-toggle="tab" href="#services">Services</a>
+            </li>
+            <!-- Add more tabs as needed -->
+        </ul>
+
+        <div class="tab-content mt-2">
+            <div class="tab-pane fade show active" id="home">
+                <div class="jumbotron">
+                    <h2 class="display-4">Welcome to our website!</h2>
+                    <p class="lead">This is the home page. Customize it as you like.</p>
+                    <hr class="my-4">
+                    <p>Learn more about our services and products.</p>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="about">
+                <h2>About Us</h2>
+                <p>This is the about page. Add your content here.</p>
+            </div>
+            <div class="tab-pane fade" id="services">
+                <h2>Our Services</h2>
+                <p>Explore our services and offerings on this page.</p>
+            </div>
+            <!-- Add more tab content as needed -->
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white">
+        &copy; 2024 Your Website. All rights reserved.
+    </footer>
+
+    <!-- Add any additional JavaScript files or scripts here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
