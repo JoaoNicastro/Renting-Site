@@ -71,19 +71,20 @@
 
             <h2>Login</h2>
 
+            <!-- login.ejs -->
+
             <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-               </div>
-
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
-
-                <button type="submit">Login</button>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
+
 
             <p>Don't have an account? <a href="/register">Register</a></p>
 

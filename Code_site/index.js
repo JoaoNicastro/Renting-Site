@@ -39,7 +39,6 @@ db.connect()
 // <!-- Section 3 : App Settings -->
 // *****************************************************
 
-
 app.set('view engine', 'ejs'); // set the view engine to EJS
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 
@@ -63,98 +62,112 @@ app.use(
 // *****************************************************
 
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    res.redirect('/discover');
 });
 
-app.get('/register', (req, res) => {
-    res.render('pages/register');
-});
 
 app.post('/register', async (req, res) => {
-    try {
-        // hash the password using bcrypt library
-        const hash = await bcrypt.hash(req.body.password, 10);
-        
-        // Insert username and hashed password into the 'users' table
-        // This is a hypothetical function and will depend on your database setup
-        const result = await insertUser(req.body.username, hash);
+  try {
+      // Extract registration data from request body
+      const { username, first_name, last_name, phone, email, password } = req.body;
 
-        if (result) {
-            // If the data has been inserted successfully, redirect to /login
-            res.redirect('/login');
-        } else {
-            // If there's an error inserting data, redirect back to /register
-            res.redirect('/register');
-        }
-    } catch (err) {
-        console.error('Error registering user:', err);
-        res.redirect('/register');
-    }
+      // hash the password using bcrypt library
+      const hash = await bcrypt.hash(password, 10);
+      
+      // Insert registration data into the 'users' table
+      const result = await insertUser(username, first_name, last_name, phone, email, hash);
+
+      if (result) {
+          // If the data has been inserted successfully, redirect to /login
+          res.redirect('/login');
+      } else {
+          // If there's an error inserting data, redirect back to /register
+          res.redirect('/register');
+      }
+  } catch (err) {
+      console.error('Error registering user:', err);
+      res.redirect('/register');
+  }
 });
+
+
+// POST /login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+      // Query the user by the provided email
+      const query = 'SELECT * FROM users WHERE email = $1';
+      const user = await db.oneOrNone(query, email);
+
+      // If user not found
+      if (!user) {
+          res.locals.errorMessage = 'User with this email does not exist.';
+          return res.render('pages/login');
+      }
+
+      // Check if password matches
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+          // Password doesn't match
+          res.locals.errorMessage = 'Incorrect password';
+          return res.render('pages/login');
+      }
+
+      // If all checks pass, save user details in session and redirect to /discover
+      req.session.user = user;
+      req.session.save();
+      res.redirect('/discover');
+  } catch (error) {
+      // If there's a database or other error
+      res.locals.errorMessage = 'An error occurred during login. Please try again later.';
+      res.render('pages/login');
+  }
+});
+
+// POST /logout
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+      if (err) {
+          return res.send('Error logging out');
+      }
+      res.redirect('/register'); // Redirect to the register page after logout
+  });
+});
+
+
+
 
 // Hypothetical insertUser function
 // This is a placeholder and you'd replace this with your actual database insertion code
-async function insertUser(username, hashedPassword) {
-    // This is where you'd insert the username and hashed password into your database
-    // For example, if you're using MySQL: 
-    await db.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, hashedPassword]);
+async function insertUser(username, firstName, lastName, phone, email, hashedPassword) {
+    // This is where you'd insert the user details into your database
+    await db.query('INSERT INTO users (username, first_name, last_name, phone, email, password) VALUES ($1, $2, $3, $4, $5, $6)', [username, firstName, lastName, phone, email, hashedPassword]);
     // And then return true upon successful insertion or false upon an error
-
 
     // For the purpose of this example, let's return true to indicate a successful insertion
     return true;
 }
 
-
-
-// Assuming you have a database connection set up and you can access your users table via some `UserModel`
-
-// GET /login
-app.get('/login', (req, res) => {
-    res.render('pages/login');
-});
-
-// POST /login
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    console.log("asd");
-    
-
-    try {
-        // Find the user by the given username
-
-        // If user not found
-        const query = 'Select password from users where username = $1';
-        const user = await db.any(query,req.body.username);
-        // Check if password matches
-        console.log(user);
-        const match = await bcrypt.compare(req.body.password, user[0].password);
-        console.log(match);
-        if (!match) {
-            // Password doesn't match
-            res.locals.errorMessage = 'Incorrect password';  // You can pass additional variables to your EJS templates
-           
-            return res.render('pages/login'); // Render the login page with an error message
-        }
-        else{
-            // If all checks pass, save user details in session and redirect to /discover
-            console.log("inside");
-            req.session.user = user;
-            req.session.save();
-            res.redirect('/discover');
-        }
-
-        
-
-    } catch (error) {
-        // If there's a database or other error
-        res.locals.errorMessage = 'An error occurred during login. Please try again later.';
-        res.render('pages/login');
-    }
-});
+// Other routes remain unchanged...
 
 module.exports = app;
 
+// Other routes remain unchanged...
+
+
+// GET /login
+app.get('/login', (req, res) => {
+  res.render('pages/login', { user: null }); // Pass user as null
+});
+
+
+// GET /register
+app.get('/register', (req, res) => {
+  res.render('pages/register', { user: req.session.user });
+});
+
+// GET /discover
 app.get('/discover', async (req, res) => {
   try {
       const response = await axios({
@@ -174,14 +187,15 @@ app.get('/discover', async (req, res) => {
       console.log(events);
       console.log(response.data);
 
-      // Render the view with the fetched events
-      res.render('pages/discover', { events });
+      // Render the view with the fetched events and user information
+      res.render('pages/discover', { events, user: req.session.user });
 
   } catch (error) {
       console.error(error);
-      res.render('pages/discover', { results: [], errorMessage: 'An error occurred.' });
+      res.render('pages/discover', { results: [], errorMessage: 'An error occurred.', user: req.session.user });
   }
 });
+
 
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
