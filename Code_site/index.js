@@ -67,28 +67,20 @@ app.get('/', (req, res) => {
 
 
 app.post('/register', async (req, res) => {
+  const { username, first_name, last_name, phone, email, password, location, price_min, price_max, size_of_apartment, furnished, bedrooms } = req.body;
+  const hash = await bcrypt.hash(password, 10);
   try {
-      // Extract registration data from request body
-      const { username, first_name, last_name, phone, email, password } = req.body;
-
-      // hash the password using bcrypt library
-      const hash = await bcrypt.hash(password, 10);
-      
-      // Insert registration data into the 'users' table
-      const result = await insertUser(username, first_name, last_name, phone, email, hash);
-
-      if (result) {
-          // If the data has been inserted successfully, redirect to /login
-          res.redirect('/login');
-      } else {
-          // If there's an error inserting data, redirect back to /register
-          res.redirect('/register');
-      }
+    const insertResult = await db.none(
+      'INSERT INTO users (username, first_name, last_name, phone, email, password, location, price_min, price_max, size_of_apartment, furnished, bedrooms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)', 
+      [username, first_name, last_name, phone, email, hash, location, price_min, price_max, size_of_apartment || null, furnished, bedrooms]
+    );
+    res.redirect('/login');
   } catch (err) {
-      console.error('Error registering user:', err);
-      res.redirect('/register');
+    console.error('Error registering user:', err);
+    res.redirect('/register');
   }
 });
+
 
 
 // POST /login
