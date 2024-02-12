@@ -198,6 +198,25 @@ app.get('/logout', (req, res) => {
     });
   });
   
+  // GET /profile
+app.get('/profile', async (req, res) => {
+  if (!req.session.user) {
+    // If user is not logged in, redirect to login page
+    return res.redirect('/login');
+  }
+
+  // Assuming req.session.user contains the user information
+  // Fetch additional user details from the database if needed
+
+  try {
+    // Render the profile page with user information
+    res.render('pages/profile', { user: req.session.user });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 
 // TODO - Include your API routes here
