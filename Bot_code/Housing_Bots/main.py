@@ -1,5 +1,15 @@
 import General_Scraper
 import csv
+import sys
+import MatchingAlg
+
+# Add the Renting-Site directory to sys.path
+project_path = '/workspaces/Renting-Site'
+if project_path not in sys.path:
+    sys.path.insert(0, project_path)
+
+# Now you can import Clients from Code_site
+from Code_site import Clients
 
 
 class Apartment:
@@ -78,6 +88,12 @@ def get_apartment_by_id(apartments, apartment_id):
     return None
 
 def main():
-    General_Scraper.setup()
-    load_apartments_from_csv('apartments.csv')
+    #General_Scraper.setup()
+    #load_apartments_from_csv('apartments.csv')
+    users = Clients.get_users()
+    for user in users:
+        matches = MatchingAlg.match_apartments(user)
+        print(matches)
+
+main()
     
