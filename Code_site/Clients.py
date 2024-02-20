@@ -42,5 +42,5 @@ def get_users():
     except psycopg2.Error as connection_error:
         print(f"Database connection failed: {connection_error}")
 
-
+get_users()
 #docker inspect code_site_db_1
