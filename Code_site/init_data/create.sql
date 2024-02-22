@@ -5,10 +5,13 @@ CREATE TABLE users (
     phone VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
-    location VARCHAR(100),
+    city VARCHAR(100),
+    university_name VARCHAR(100), -- Optional
+    location_preference VARCHAR(100), -- 'Radius', 'Neighborhoods', or 'No preference'
     price_min DECIMAL(10, 2),
     price_max DECIMAL(10, 2),
-    size_of_apartment INT, -- NULL if 'Doesn't matter'
+    min_area INT,
+    max_area INT,
     furnished BOOLEAN,
     bedrooms VARCHAR(3) -- '1', '2', '3+' to represent the number of bedrooms
 );

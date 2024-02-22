@@ -67,19 +67,24 @@ app.get('/', (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-  const { username, first_name, last_name, phone, email, password, location, price_min, price_max, size_of_apartment, furnished, bedrooms } = req.body;
+  // Assuming 'location_type' is a field to indicate the choice between distance or neighborhoods
+  const { username, email, password, search_city, distance, neighborhoods, location_type } = req.body;
   const hash = await bcrypt.hash(password, 10);
+
+  // Decide which field to use based on the user's choice
+  const location_preference = location_type === 'distance' ? distance : neighborhoods;
+
   try {
-    const insertResult = await db.none(
-      'INSERT INTO users (username, first_name, last_name, phone, email, password, location, price_min, price_max, size_of_apartment, furnished, bedrooms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)', 
-      [username, first_name, last_name, phone, email, hash, location, price_min, price_max, size_of_apartment || null, furnished, bedrooms]
-    );
+    // Adjust the SQL query to include the location_preference
+    await db.none('INSERT INTO users (username, email, password, search_city, location_preference) VALUES ($1, $2, $3, $4, $5)', [username, email, hash, search_city, location_preference]);
     res.redirect('/login');
   } catch (err) {
     console.error('Error registering user:', err);
     res.redirect('/register');
   }
 });
+
+
 
 
 

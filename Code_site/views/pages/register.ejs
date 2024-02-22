@@ -84,6 +84,30 @@
                   <label for="furnished_no">No</label>
                 </div>
               </div>
+
+              <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+              </div>
+              <div class="mb-3">
+                <label for="university_name" class="form-label">University Name (Optional)</label>
+                <input type="text" class="form-control" id="university_name" name="university_name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Apartment Distance Option</label>
+                <select class="form-select" name="location_preference">
+                  <option value="radius">Radius from City/University</option>
+                  <option value="neighborhoods">Neighborhoods</option>
+                  <option value="no_preference">No Preference (Whole City)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Area (m²)</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" placeholder="Min Area" name="min_area" required>
+                  <input type="number" class="form-control" placeholder="Max Area" name="max_area" required>
+                </div>
+              </div>
               <!-- New Fields End Here -->
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
