@@ -10,6 +10,7 @@ if project_path not in sys.path:
 
 # Now you can import Clients from Code_site
 from Code_site import Clients
+from EMAIL import send_email
 
 
 class Apartment:
@@ -94,6 +95,7 @@ def main():
     for user in users:
         matches = MatchingAlg.match_apartments(user)
         print(matches)
-
+        if len(matches) != 0:
+            send_email(user, matches)
 main()
     

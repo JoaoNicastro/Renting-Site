@@ -9,8 +9,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
-const cron = require('node-cron');
-const fs = require('fs');
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -83,7 +81,42 @@ app.post('/register', async (req, res) => {
   }
 });
 
+const { spawn } = require('child_process');
+async function fetchUsersAndSendToPython() {
+  try {
+    // SQL query to fetch the specified information
+    const query = `
+      SELECT username, first_name, last_name, phone, email, password AS hash, location, 
+             price_min, price_max, size_of_apartment, furnished, bedrooms
+      FROM users
+    `;
 
+    // Execute the query
+    const userData = await db.any(query);
+
+    // Serialize the user data to a JSON string
+    const dataString = JSON.stringify(userData);
+
+    // Spawn a Python process and send the user data
+    const pythonProcess = spawn('python3', ['/workspaces/Renting-Site/Code_site/Clients.py']);
+    pythonProcess.stdin.write(dataString);
+    pythonProcess.stdin.end();
+
+    pythonProcess.stdout.on('data', (data) => {
+      console.log(`Python script output: ${data}`);
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      console.error(`Python script error: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+      console.log(`Python script exited with code ${code}`);
+    });
+  } catch (error) {
+    console.error('Failed to fetch user data and send to Python:', error);
+  }
+}
 
 // POST /login
 app.post('/login', async (req, res) => {
@@ -148,6 +181,7 @@ async function insertUser(username, firstName, lastName, phone, email, hashedPas
 module.exports = app;
 
 // Other routes remain unchanged...
+
 
 // GET /login
 app.get('/login', (req, res) => {
@@ -226,6 +260,5 @@ app.get('/profile', async (req, res) => {
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-
 app.listen(3000);
 console.log('Server is listening on port 3000');
