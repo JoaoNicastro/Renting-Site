@@ -1,7 +1,8 @@
 // *****************************************************
 // <!-- Section 1 : Import Dependencies -->
 // *****************************************************
-
+const http = require('http');
+const { Server } = require("socket.io");
 const express = require('express'); // To build an application server or API
 const app = express();
 const pgp = require('pg-promise')(); // To connect to the Postgres DB from the node server
@@ -9,6 +10,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
+const server = http.createServer(app); // Wrap the Express app
+const io = new Server(server); // Attach socket.io to the server
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -60,6 +63,23 @@ app.use(
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
+
+
+app.get('/chat', (req, res) => {
+  res.render('chat');
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg); // This should broadcast to all users
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
 
 app.get('/', (req, res) => {
     res.redirect('/discover');
@@ -246,5 +266,8 @@ app.get('/profile', async (req, res) => {
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+server.listen(3000, () => {
+  console.log('Server listening on *:3000');
+});
+
 console.log('Server is listening on port 3000');
