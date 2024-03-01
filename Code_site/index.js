@@ -84,10 +84,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
-
-
 // POST /login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
