@@ -67,22 +67,42 @@ app.get('/', (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-  // Assuming 'location_type' is a field to indicate the choice between distance or neighborhoods
-  const { username, email, password, search_city, distance, neighborhoods, location_type } = req.body;
-  const hash = await bcrypt.hash(password, 10);
+  // Capture all form data
+  const {
+    username, first_name, last_name, phone, email, password, city, university_name, location_preference,
+    price_min, price_max, min_area, max_area, furnished, bedrooms, gender, budget, location, university, pets,
+    language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbies,
+    language_pref, gender_pref, sleep_time_pref, wake_up_time_pref, smoking_pref, drinking_pref, relationship_pref
+  } = req.body;
 
-  // Decide which field to use based on the user's choice
-  const location_preference = location_type === 'distance' ? distance : neighborhoods;
+  const hash = await bcrypt.hash(password, 10); // Hash the password
 
   try {
-    // Adjust the SQL query to include the location_preference
-    await db.none('INSERT INTO users (username, email, password, search_city, location_preference) VALUES ($1, $2, $3, $4, $5)', [username, email, hash, search_city, location_preference]);
+    // Insert the user data into the database
+    await db.none(
+      `INSERT INTO users (
+        username, first_name, last_name, phone, email, password, city, university_name, location_preference,
+        price_min, price_max, min_area, max_area, furnished, bedrooms, gender, budget, location, university, pets,
+        language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbies,
+        language_pref, gender_pref, sleep_time_pref, wake_up_time_pref, smoking_pref, drinking_pref, relationship_pref
+      ) VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+        $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34
+      )`, 
+      [
+        username, first_name, last_name, phone, email, hash, city, university_name, location_preference,
+        price_min, price_max, min_area, max_area, furnished, bedrooms, gender, budget, location, university, pets,
+        language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbies,
+        language_pref, gender_pref, sleep_time_pref, wake_up_time_pref, smoking_pref, drinking_pref, relationship_pref
+      ]
+    );
     res.redirect('/login');
   } catch (err) {
     console.error('Error registering user:', err);
     res.redirect('/register');
   }
 });
+
 
 // POST /login
 app.post('/login', async (req, res) => {

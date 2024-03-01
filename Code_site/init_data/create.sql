@@ -35,3 +35,13 @@ CREATE TABLE users (
     drinking_pref BOOLEAN,
     relationship_pref VARCHAR(10)
 );
+
+
+CREATE TABLE compatibility_scores (
+    id SERIAL PRIMARY KEY,
+    user_id_a VARCHAR(50) REFERENCES users(username),
+    user_id_b VARCHAR(50) REFERENCES users(username),
+    score DECIMAL(10, 2) NOT NULL CHECK (score >= 0),
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
