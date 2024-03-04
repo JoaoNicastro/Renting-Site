@@ -1,0 +1,6 @@
+.btn-green-yellow {
+    background-color: #ADFF2F; /* Green-yellow color */
+    color: #000; /* Black color text */
+    border: none; /* Removes the border if there is one */
+    /* Add other styling properties as needed, like padding, border-radius, etc. */
+}
