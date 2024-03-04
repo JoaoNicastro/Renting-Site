@@ -268,20 +268,6 @@ app.get('/profile', async (req, res) => {
   }
 });
 
-
-
-// TODO - Include your API routes here
-
-// *****************************************************
-// <!-- Section 5 : Start Server-->
-// *****************************************************
-// starting the server and keeping the connection open to listen for more requests
-server.listen(3000, () => {
-  console.log('Server listening on *:3000');
-});
-
-console.log('Server is listening on port 3000');
-
 async function calculateScoresForNewUser(newUsername) {
   const newUserPreferences = await fetchUserPreferencesByUsername(newUsername);
   const existingUsers = await fetchUserPreferences();
@@ -421,3 +407,16 @@ try {
     res.status(500).send('Internal server error');
 }
 });
+
+// TODO - Include your API routes here
+
+// *****************************************************
+// <!-- Section 5 : Start Server-->
+// *****************************************************
+// starting the server and keeping the connection open to listen for more requests
+server.listen(3000, () => {
+  console.log('Server listening on *:3000');
+});
+
+console.log('Server is listening on port 3000');
+
