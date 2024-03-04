@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Matches</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socket = io();
+
+            socket.on('updateScores', function(data) {
+                if (data.user === "<%= user.username %>") {
+                    // Fetch and update their matches
+                    location.reload(); // Simple way to refresh the data
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Your Top Matches</h1>
+    <div id="matches">
+        <% matches.forEach(match => { %>
+            <p><%= match.match %> - Score: <%= match.score %></p>
+        <% }); %>
+    </div>
+</body>
+</html>
