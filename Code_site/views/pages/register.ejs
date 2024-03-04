@@ -4,13 +4,14 @@
 <main>
   <div class="container mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-6">
+      <div class="col-md-8"> <!-- Adjusted for potential additional width requirement -->
         <div class="card">
           <div class="card-header">
             Register
           </div>
           <div class="card-body">
             <form action="/register" method="POST">
+              <!-- Existing Fields -->
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -35,56 +36,174 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
               </div>
-              <!-- New Fields Start Here -->
+              <div class="mb-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" name="city">
+              </div>
+              <div class="mb-3">
+                <label for="university_name" class="form-label">University Name (Optional)</label>
+                <input type="text" class="form-control" id="university_name" name="university_name">
+              </div>
+              <div class="mb-3">
+                <label for="location_preference" class="form-label">Location Preference</label>
+                <select class="form-select" id="location_preference" name="location_preference">
+                  <option value="radius">Radius</option>
+                  <option value="neighborhoods">Neighborhoods</option>
+                  <option value="no_preference">No Preference</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Price Range</label>
+                <input type="number" class="form-control mb-2" placeholder="Min Price" name="price_min" required>
+                <input type="number" class="form-control" placeholder="Max Price" name="price_max" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Area (m²)</label>
+                <input type="number" class="form-control mb-2" placeholder="Min Area" name="min_area" required>
+                <input type="number" class="form-control" placeholder="Max Area" name="max_area" required>
+              </div>
+              <div class="mb-3">
+                <label for="furnished" class="form-label">Furnished</label>
+                <select class="form-select" id="furnished" name="furnished">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="bedrooms" class="form-label">Bedrooms</label>
+                <select class="form-select" id="bedrooms" name="bedrooms">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3+">3+</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="budget" class="form-label">Budget</label>
+                <input type="number" class="form-control" id="budget" name="budget" required>
+              </div>
+              
               <div class="mb-3">
                 <label for="location" class="form-label">Location</label>
                 <input type="text" class="form-control" id="location" name="location" required>
               </div>
+              
               <div class="mb-3">
-                <label class="form-label">Price</label>
-                <div class="input-group">
-                  <input type="number" class="form-control" placeholder="Min" name="price_min" required>
-                  <input type="number" class="form-control" placeholder="Max" name="price_max" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Bedrooms</label>
-                <div>
-                  <input type="radio" id="bedrooms_1" name="bedrooms" value="1">
-                  <label for="bedrooms_1">1</label>
-                </div>
-                <div>
-                  <input type="radio" id="bedrooms_2" name="bedrooms" value="2">
-                  <label for="bedrooms_2">2</label>
-                </div>
-                <div>
-                  <input type="radio" id="bedrooms_3" name="bedrooms" value="3+">
-                  <label for="bedrooms_3">3+</label>
-                </div>
+                <label for="university" class="form-label">University</label>
+                <input type="text" class="form-control" id="university" name="university">
               </div>
               
-
               <div class="mb-3">
-                <label for="size" class="form-label">Size Of Apartment</label>
-                <div id="size_doesnt_matter_container">
-                  <input type="checkbox" id="size_doesnt_matter" name="size_doesnt_matter">
-                  <label for="size_doesnt_matter">Doesn't matter</label>
-                </div>
-                <input type="number" class="form-control" id="size_choice" name="size_choice" placeholder="Enter size (m²)">
+                <label for="pets" class="form-label">Pets</label>
+                <select class="form-select" id="pets" name="pets">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
               </div>
+              
               <div class="mb-3">
-                <label class="form-label">Furnished</label>
-                <div>
-                  <input type="radio" id="furnished_yes" name="furnished" value="Yes">
-                  <label for="furnished_yes">Yes</label>
-                </div>
-                <div>
-                  <input type="radio" id="furnished_no" name="furnished" value="No">
-                  <label for="furnished_no">No</label>
-                </div>
+                <label for="language" class="form-label">Language</label>
+                <input type="text" class="form-control" id="language" name="language" required>
               </div>
-              <!-- New Fields End Here -->
+              
+              <div class="mb-3">
+                <label for="sleep_time" class="form-label">Sleep Time</label>
+                <input type="time" class="form-control" id="sleep_time" name="sleep_time" required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="wake_up_time" class="form-label">Wake Up Time</label>
+                <input type="time" class="form-control" id="wake_up_time" name="wake_up_time" required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="smoking" class="form-label">Smoking</label>
+                <select class="form-select" id="smoking" name="smoking">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="drinking" class="form-label">Drinking</label>
+                <select class="form-select" id="drinking" name="drinking">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="relationship_status" class="form-label">Relationship Status</label>
+                <select class="form-select" id="relationship_status" name="relationship_status" required>
+                  <option value="single">Single</option>
+                  <option value="dating">Dating</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="hobbies" class="form-label">Hobbies</label>
+                <input type="text" class="form-control" id="hobbies" name="hobbies" placeholder="List hobbies separated by commas">
+              </div>
+              
+              <div class="mb-3">
+                <label for="language_pref" class="form-label">Language Preference (Dealbreaker)</label>
+                <input type="text" class="form-control" id="language_pref" name="language_pref">
+              </div>
+              
+              <div class="mb-3">
+                <label for="gender_pref" class="form-label">Gender Preference (Dealbreaker)</label>
+                <select class="form-select" id="gender_pref" name="gender_pref">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="sleep_time_pref" class="form-label">Preferred Sleep Time</label>
+                <input type="time" class="form-control" id="sleep_time_pref" name="sleep_time_pref">
+              </div>
+              
+              <div class="mb-3">
+                <label for="wake_up_time_pref" class="form-label">Preferred Wake Up Time</label>
+                <input type="time" class="form-control" id="wake_up_time_pref" name="wake_up_time_pref">
+              </div>
+              
+              <div class="mb-3">
+                <label for="smoking_pref" class="form-label">Smoking Preference</label>
+                <select class="form-select" id="smoking_pref" name="smoking_pref">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                  <option value="no_preference">No Preference</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="drinking_pref" class="form-label">Drinking Preference</label>
+                <select class="form-select" id="drinking_pref" name="drinking_pref">
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                  <option value="no_preference">No Preference</option>
+                </select>
+              </div>
+              
+              <div class="mb-3">
+                <label for="relationship_pref" class="form-label">Relationship Status Preference</label>
+                <select class="form-select" id="relationship_pref" name="relationship_pref">
+                  <option value="single">Single</option>
+                  <option value="dating">Dating</option>
+                  <option value="no_preference">No Preference</option>
+                </select>
+              </div>
+              
+              <!-- Button to submit the form -->
               <button type="submit" class="btn btn-primary">Register</button>
             </form>
             <div class="mt-3">

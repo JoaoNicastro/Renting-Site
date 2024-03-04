@@ -248,22 +248,28 @@ async function updateCompatibilityScore(user_id_a, user_id_b, newScore) {
     }
 }
 
-app.get('/matches/:username', async (req, res) => {
-    const { username } = req.params;
-    try {
-        const query = `
-            SELECT user_id_b as match, score
-            FROM compatibility_scores
-            WHERE user_id_a = $1
-            ORDER BY score DESC
-            LIMIT 10;  // Adjust the limit as needed
-        `;
-        const matches = await db.any(query, [username]);
-        res.render('pages/matches', { user: req.session.user, matches });
-    } catch (err) {
-        console.error('Error fetching matches:', err);
-        res.status(500).send('Internal server error');
-    }
+app.get('/matches', async (req, res) => {
+  // Check if the user is logged in and has a username
+  if (!req.session.user || !req.session.user.username) {
+      return res.redirect('/login'); // Redirect to login if not
+  }
+
+  const username = req.session.user.username; // Use the logged-in user's username
+
+  try {
+      const query = `
+          SELECT user_id_b as match, score
+          FROM compatibility_scores
+          WHERE user_id_a = $1
+          ORDER BY score DESC
+          LIMIT 10;  // Adjust the limit as needed
+      `;
+      const matches = await db.any(query, [username]);
+      res.render('pages/matches', { user: req.session.user, matches });
+  } catch (err) {
+      console.error('Error fetching matches:', err);
+      res.status(500).send('Internal server error');
+  }
 });
 
 // POST /login

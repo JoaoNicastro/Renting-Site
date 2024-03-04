@@ -2,18 +2,25 @@
     "name": "web-services",
     "main": "index.js",
     "dependencies": {
-        "axios": "^1.1.3",
-        "bcrypt": "^5.1.0",
-        "body-parser": "1.20.0",
-        "ejs": "^3.1.8",
-        "ejs-lint": "^0.3.0",
-        "express": "^4.6.1",
-        "express-session": "1.17.3",
-        "pg-promise": "^10.11.1",
-        "nodemon": "2.0.20"
+      "axios": "^1.1.3",
+      "bcrypt": "^5.1.0",
+      "body-parser": "1.20.0",
+      "ejs": "^3.1.9",
+      "ejs-lint": "^0.3.0",
+      "express": "^4.18.3",
+      "express-session": "1.17.3",
+      "pg-promise": "^10.11.1",
+      "socket.io": "^4.7.4"
     },
     "scripts": {
-        "prestart": "npm install",
-        "start": "nodemon index.js"
+      "prestart": "npm install",
+      "start": "nodemon index.js"
+    },
+    "description": "|                                                Course Website                                                 |                                                  Canvas                                                    |                                              Piazza                                               | | :-----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------: | | [![Course Website](https://img.shields.io/badge/Labs-Lab9-0A4D99)](https://cuboulder-csci3308.pages.dev/docs/labs/lab9/) | [![Canvas](https://img.shields.io/badge/Canvas-CSCI3308-CFB87C)](https://canvas.colorado.edu/courses/92232) | [![Piazza](https://img.shields.io/badge/-Piazza-3e7aab)](https://piazza.com/class/ld0j3b0tyko2rk) |",
+    "version": "1.0.0",
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "nodemon": "^3.1.0"
     }
-}
+  }
