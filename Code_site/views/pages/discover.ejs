@@ -1,140 +1,63 @@
-<%- include ('../partials/head') %>
-
-<header class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Your App Name</a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <% if (user) { %>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Profile
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/profile">View Profile</a></li>
-              <li><a class="dropdown-item" href="/logout">Logout</a></li>
-            </ul>
-          </li>
-        <% } else { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-        <% } %>
-      </ul>
-    </div>
-  </div>
-</header>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1em;
-        }
-
-        main {
-            padding: 2em;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 1em;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        #popup-container {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
+    <%- include('../partials/head.ejs') %> <!-- Include the head content -->
+    <title>Your Ideal Student Stay</title>
+    <!-- Add any specific CSS or scripts for this page -->
 </head>
-
 <body>
+   <%- include('../partials/menu.ejs') %> <!--  Include the navigation menu -->
+   <link rel="stylesheet" href="../css/styles.css">
+   <header class="info-box" style="padding-left: 20px;"> <!-- Adjust the padding value as needed -->
+    <h1>Your Ideal Student Stay</h1>
+    <h2>Quick and Easy</h2>
+    <p>Discover the smart way to find your next student home. Our service instantly scans hundreds of rental sites to alert you about new listings, drastically improving your chances for a viewing.</p>
+    <p>Say goodbye to the endless search and unsuccessful applications.</p>
+    <a href="#" class="btn btn-primary" style="background-color: #ADFF2F; color: #000; font-weight: bold;" >Find your new home</a>
 
-    <main>
-        <h2>Welcome to the Discover Page</h2>
-        <p>This is where you can explore and discover exciting events!</p>
-
-        <div>
-            <h3>Upcoming Events</h3>
-            <!-- Display your upcoming events here -->
-        </div>
-        <!-- New Tabs Content -->
-        <ul class="nav nav-tabs mt-4">
-            <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="about-tab" data-toggle="tab" href="#about">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="services-tab" data-toggle="tab" href="#services">Services</a>
-            </li>
-            <!-- Add more tabs as needed -->
-        </ul>
-
-        <div class="tab-content mt-2">
-            <div class="tab-pane fade show active" id="home">
-                <div class="jumbotron">
-                    <h2 class="display-4">Welcome to our website!</h2>
-                    <p class="lead">This is the home page. Customize it as you like.</p>
-                    <hr class="my-4">
-                    <p>Learn more about our services and products.</p>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+</header>
+    
+    <section class="container mt-5">
+        <h2 class="text-center" style= "font-weight: bold;">Jumpstart Your Housing Hunt</h2>
+        <div class="row text-center">
+            <!-- Rental Alerts -->
+            <div class="col-md-3">
+                <div class="feature">
+                    <img src="/path/to/rental-alerts-icon.png" alt="Rental Alerts Icon">
+                    <h3>Rental Alerts</h3>
+                    <p>Receive instant updates on new listings that fit your preferences, ensuring you never miss a housing opportunity again. Stay ahead of the game.</p>
                 </div>
             </div>
-            <div class="tab-pane fade" id="about">
-                <h2>About Us</h2>
-                <p>This is the about page. Add your content here.</p>
+            <!-- Roommate Match -->
+            <div class="col-md-3">
+                <div class="feature">
+                    <img src="/path/to/roommate-match-icon.png" alt="Roommate Match Icon">
+                    <h3>Roommate Match</h3>
+                    <p>Reduce your rental expenses and streamline your search. Find a compatible roommate on our platform and secure your ideal home together.</p>
+                </div>
             </div>
-            <div class="tab-pane fade" id="services">
-                <h2>Our Services</h2>
-                <p>Explore our services and offerings on this page.</p>
+            <!-- Automatic Reply -->
+            <div class="col-md-3">
+                <div class="feature">
+                    <img src="/path/to/automatic-reply-icon.png" alt="Automatic Reply Icon">
+                    <h3>Automatic Reply</h3>
+                    <p>Secure viewings quickly with our automatic responder, putting your application at the forefront effortlessly.</p>
+                </div>
             </div>
-            <!-- Add more tab content as needed -->
+            <!-- 14 Days Free Trial -->
+            <div class="col-md-3">
+                <div class="feature">
+                    <img src="/path/to/free-trial-icon.png" alt="14 Days Free Trial Icon">
+                    <h3>14 Days Free Trial</h3>
+                    <p>Test our platform with a 14-day free trial. Save hours of searching with no commitment.</p>
+                </div>
+            </div>
         </div>
-    </main>
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-primary" style="background-color: #000000; color: #ffffff;">Find your new home</a>
+        </div>
+    </section>
 
-    <footer class="bg-dark text-white">
-        &copy; 2024 Your Website. All rights reserved.
-    </footer>
-
-    <!-- Add any additional JavaScript files or scripts here -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    
+    <%- include('../partials/footer.ejs') %> <!-- Include the footer content -->
 </body>
-
 </html>
-
-
-
-</main>
-
-<%- include ('../partials/footer') %>
