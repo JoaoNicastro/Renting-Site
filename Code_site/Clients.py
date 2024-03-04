@@ -21,39 +21,59 @@ DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 DB_HOST = ip_add  # Service name defined in Docker Compose
 DB_PORT = "5432"  # Port exposed by PostgreSQL container
 
+def get_db_connection():
+    load_dotenv()  # Load environment variables from .env file
+
+    # Accessing environment variables
+    DB_NAME = os.getenv("POSTGRES_DB")
+    DB_USER = os.getenv("POSTGRES_USER")
+    DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    # For Docker IP, this should ideally be set once outside this function or passed as a parameter
+    client = docker.DockerClient()
+    container = client.containers.get('code_site_db_1')
+    DB_HOST = container.attrs['NetworkSettings']['Networks']['code_site_default']['IPAddress']
+    DB_PORT = "5432"  # Port exposed by PostgreSQL container
+
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    return conn
+
+# Function to insert a compatibility score
+def insert_compatibility_score(user_id_a, user_id_b, score):
+    try:
+        conn = get_db_connection()  # Establish database connection
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO compatibility_scores (user_id_a, user_id_b, score)
+                VALUES (%s, %s, %s)
+                """, (user_id_a, user_id_b, score))
+            conn.commit()  # Commit the transaction
+            print("Compatibility score inserted successfully")
+    except psycopg2.Error as e:
+        print(f"Failed to insert compatibility score: {e}")
+    finally:
+        if conn:
+            conn.close()  # Ensure the connection is closed
+
 def get_users():
     try:
-        # Attempt to establish a database connection
-        print(DB_HOST)
-        print(DB_NAME)
-        print(DB_PASSWORD) 
-        print(DB_PORT)
-        print(DB_USER)
-        conn = psycopg2.connect(
-            dbname=DB_NAME,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            host=DB_HOST,
-            port=DB_PORT
-        )
-        print("Database connection successful")
-        
-        # Perform database operations
-        try:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM users")
-                users = cur.fetchall()
-                print(users)
-                return users
-        except psycopg2.Error as query_error:
-            print(f"Failed to query database: {query_error}")
-        
-        finally:
-            # Close the database connection
-            conn.close()
-
-    except psycopg2.Error as connection_error:
-        print(f"Database connection failed: {connection_error}")
+        conn = get_db_connection()  # Establish database connection
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM users")
+            users = cur.fetchall()
+            for user in users:
+                print(user)  # Print each user or process as needed
+            return users
+    except psycopg2.Error as e:
+        print(f"Failed to query database: {e}")
+    finally:
+        if conn:
+            conn.close()  # Ensure the connection is closed
 
 get_users()
 #docker inspect code_site_db_1

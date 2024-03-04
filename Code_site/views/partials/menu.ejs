@@ -1,30 +1,18 @@
-<!-- menu.ejs -->
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Your App Name</a>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <% if (user) { %>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Profile
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="/profile">View Profile</a></li>
-                <li><a class="dropdown-item" href="/logout">Logout</a></li>
-              </ul>
-            </li>
-          <% } else { %>
-            <li class="nav-item">
-              <a class="nav-link" href="/register">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/login">Login</a>
-            </li>
-          <% } %>
-        </ul>
-      </div>
+<nav class="navbar" style="background-color: #f8f9fa; /* Adjust the background color to match your theme */">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="navbar-brand">
+            <a href="/">
+                <img src="/img/logo.png" alt="Logo" style="height: 50px;"> <!-- Adjust the path as needed -->
+            </a>
+        </div>
+        <div class="navbar-menu" style="display: flex; gap: 20px;">
+            <a href="/" class="navbar-item" style="text-decoration: none; color: #333;">First page</a>
+            <a href="/second" class="navbar-item" style="text-decoration: none; color: #333;">Second page</a>
+            <a href="/third" class="navbar-item" style="text-decoration: none; color: #333;">Third page</a>
+            <a href="/fourth" class="navbar-item" style="text-decoration: none; color: #333;">Fourth page</a>
+        </div>
+        <div class="navbar-end">
+            <a href="/find-your-stay" class="navbar-item navbar-button" style="background-color: #000; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Find Your Stay</a>
+        </div>
     </div>
-  </nav>
-  
+</nav>
