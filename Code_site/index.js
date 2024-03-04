@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
+const { log } = require('console');
 const server = http.createServer(app); // Wrap the Express app
 const io = new Server(server); // Attach socket.io to the server
 
@@ -94,7 +95,7 @@ app.post('/register', async (req, res) => {
     language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbies,
     language_pref, gender_pref, sleep_time_pref, wake_up_time_pref, smoking_pref, drinking_pref, relationship_pref
   } = req.body;
-
+  const hobbiesArrayLiteral = `{${hobbies}}`;
   const hash = await bcrypt.hash(password, 10); // Hash the password
 
   try {
@@ -112,10 +113,12 @@ app.post('/register', async (req, res) => {
       [
         username, first_name, last_name, phone, email, hash, city, university_name, location_preference,
         price_min, price_max, min_area, max_area, furnished, bedrooms, gender, budget, location, university, pets,
-        language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbies,
+        language, sleep_time, wake_up_time, smoking, drinking, relationship_status, hobbiesArrayLiteral,
         language_pref, gender_pref, sleep_time_pref, wake_up_time_pref, smoking_pref, drinking_pref, relationship_pref
       ]
+      
     );
+    console.log('information added:', price_max,sleep_time, language_pref )
     res.redirect('/login');
   } catch (err) {
     console.error('Error registering user:', err);
