@@ -26,7 +26,7 @@ CREATE TABLE users (
     smoking BOOLEAN,
     drinking BOOLEAN,
     relationship_status VARCHAR(10),
-    hobbies TEXT[], -- Assuming your DB supports array types, else could use TEXT and handle at application level
+    hobbies TEXT, -- Assuming your DB supports array types, else could use TEXT and handle at application level
     language_pref TEXT,
     gender_pref VARCHAR(10),
     sleep_time_pref TIME,

@@ -216,34 +216,39 @@
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      var sizeDoesntMatterContainer = document.getElementById('size_doesnt_matter_container');
-      var sizeDoesntMatterCheckbox = document.getElementById('size_doesnt_matter');
-      var sizeChoice = document.getElementById('size_choice');
+  var sizeDoesntMatterContainer = document.getElementById('size_doesnt_matter_container');
+  var sizeDoesntMatterCheckbox = document.getElementById('size_doesnt_matter');
+  var sizeChoice = document.getElementById('size_choice');
 
-      function toggleSizeInput() {
-        if (sizeDoesntMatterCheckbox.checked) {
-          sizeChoice.style.display = 'none';
-          sizeChoice.value = ''; // Clear value when 'Doesn't matter' is checked
-        } else {
-          sizeChoice.style.display = '';
-        }
-      }
+  function toggleSizeInput() {
+    if (sizeDoesntMatterCheckbox && sizeDoesntMatterCheckbox.checked) {
+      sizeChoice.style.display = 'none';
+      sizeChoice.value = ''; // Clear value when 'Doesn't matter' is checked
+    } else if (sizeChoice) {
+      sizeChoice.style.display = '';
+    }
+  }
 
-      function toggleDoesntMatter() {
-        if (sizeChoice.value) {
-          sizeDoesntMatterContainer.style.display = 'none';
-        } else {
-          sizeDoesntMatterContainer.style.display = '';
-        }
-      }
+  function toggleDoesntMatter() {
+    if (sizeChoice && sizeChoice.value) {
+      sizeDoesntMatterContainer.style.display = 'none';
+    } else if (sizeDoesntMatterContainer) {
+      sizeDoesntMatterContainer.style.display = '';
+    }
+  }
 
-      sizeDoesntMatterCheckbox.addEventListener('change', toggleSizeInput);
-      sizeChoice.addEventListener('input', toggleDoesntMatter);
+  if (sizeDoesntMatterCheckbox) {
+    sizeDoesntMatterCheckbox.addEventListener('change', toggleSizeInput);
+  }
+  if (sizeChoice) {
+    sizeChoice.addEventListener('input', toggleDoesntMatter);
+  }
 
-      // Initial check to set the correct display state
-      toggleSizeInput();
-      toggleDoesntMatter();
-    });
+  // Initial check to set the correct display state
+  toggleSizeInput();
+  toggleDoesntMatter();
+});
+
   </script>
 </main>
 

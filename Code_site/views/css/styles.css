@@ -1,0 +1,249 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+.desktop-navbar-menu {
+    display: none;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column; /* Stacks elements vertically */
+    align-items: stretch; /* Aligns items at the start of the flex container */
+    width: 100%;
+}
+
+.main-container, .image-container {
+    width: 100%; /* Ensures elements take up the full width */
+    padding: 1rem; /* Provides some padding around the content */
+    box-sizing: border-box;
+}
+
+.text-container {
+    width: 100%; /* Ensures elements take up the full width */
+    padding: 0.3rem;
+    box-sizing: border-box;
+}
+
+.image-container img {
+    width: 100%; /* Makes the image responsive */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.btn-green-yellow {
+    background-color: #CCFF00;
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.quick-easy-header{
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Adjusts size dynamically */
+    color: #4F3CC9; /* Set the color */
+    font-weight: bold; /* Makes the font bold */
+}
+
+.ideal-student-stay {
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Adjusts size dynamically */
+    font-weight: bold; /* Makes the font bold */
+}
+
+/* Base styles for the navbar */
+.navbar {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 3rem;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Fullscreen Menu Overlay */
+.menu-overlay {
+    height: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 100; /* Ensure it's above other content */
+    top: 0;
+    left: 0;
+    background-color: #000; /* Non-transparent background */
+    overflow-y: hidden; /* Hide scrollbars */
+    transition: height 0.3s ease;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+.overlay-logo {
+    height: 3rem; /* Adjust the logo size as needed */
+}
+
+.login-button {
+    margin-right: 3rem;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-size: 1.2rem; /* Increased font size */
+    /* Add a margin-top if you want to move the button down in the flow of the document */
+    
+}
+
+.close-button {
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    position: absolute; /* Positioning the close button absolutely */ /* Aligns top of the button with the header */
+    right: 1rem; /* Keeps the button 1rem from the right edge */
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navbar-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 0;
+}
+
+.navbar-item + hr {
+    border: 0;
+    height: 1px;
+    background-color: #333;
+    width: 90%; /* Line separator width */
+    margin: 0;
+}
+
+/* Adjustments for menu animation */
+.menu-overlay.active {
+    height: 100%; /* When active, show the full screen */
+}
+
+@media (min-width: 768px) {
+    .flex-container {
+        flex-direction: row; /* Aligns elements horizontally for larger screens */
+        flex-wrap: wrap; /* Allows items to wrap as needed */
+        justify-content: space-between; /* Distributes space between and around content items */
+    }
+
+    .desktop-navbar-menu {
+        display: flex; /* Show desktop navigation */
+        justify-content: center; /* Center items */
+        align-items: center;
+        gap: 0.5rem; /* Adjust the gap between items */
+    }
+
+    .desktop-navbar-menu .navbar-item, .desktop-navbar-menu .find-home-button {
+        /* Adjust font size dynamically with clamp */
+        margin: 0; /* Resets any default margin */
+        padding: 0.5rem; /* Adjust padding as necessary, or reduce if space is tight */
+        font-size: clamp(0.9rem, 1.2vw, 1.2rem); /* Example: Reduces base font size, adjust as needed */
+    }
+
+    .menu-button {
+        display: none;
+    }
+
+    .main-container, .image-container {
+        width: 48%; /* Adjusts width so they fit side by side, adjust as needed */
+        padding: 2rem; /* More padding for larger screens */
+    }
+
+    .quick-easy-header, .ideal-student-stay {
+        font-size: clamp(3rem, 1.5vw, 3rem); /* Larger font sizes for bigger screens */
+        font-weight: bold; /* Makes the font bold */
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar {
+        /* Ensure the navbar stretches out fully and its content aligns with the main content */
+        max-width: 1200px; /* Or the max-width of your main content for consistency */
+        margin: 0 auto; /* Center the navbar within the viewport */
+    }
+
+    .navbar-brand img {
+        /* Adjust the size if needed for desktop layout */
+        height: 3.5rem; /* Example adjustment */
+        margin-left: 2rem;
+    }
+
+    /* If the main content is centered within a specific max-width, apply the same rules here */
+    .navbar, .menu-overlay {
+        max-width: 100%; /* Adjust based on your main content's width */
+        margin: auto; /* Center aligning */
+    }
+
+    .menu-header, .menu-container {
+        padding-left: 0; /* Remove any default padding to align content */
+        text-align: left; /* Aligns the text to the left, matching your main content alignment */
+    }
+
+    .navbar-menu, .menu-container {
+        display: flex;
+        justify-content: center; /* Aligns items in the center */
+        gap: 20px; /* Equidistant gaps between items */
+        list-style: none; /* Removes list styling if it's a list */
+        padding: 0; /* Removes default padding */
+        width: 100%; /* Ensures full width */
+    }
+
+    /* Show 'Find Your Stay' button on larger devices */
+    .navbar-button {
+        display: inline-block;
+        background-color: #000;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .navbar-item, .login-button {
+        display: inline-block; /* Aligns items inline with spacing */
+        text-decoration: none; /* Removes underline from links */
+        color: #333; /* Color for text */
+        padding: 10px 20px; /* Spacing around text */
+        margin: 0 10px; /* Margins between items */
+    }
+
+    .find-home-button { /* Add this class to your "Find your new home" button */
+        background-color: #000; /* Background color */
+        color: #fff; /* Text color */
+        border: none; /* Removes border */
+        padding: 10px 20px; /* Padding inside the button */
+        border-radius: 5px; /* Rounded corners */
+        text-decoration: none; /* Removes underline */
+        font-weight: bold; /* Makes the text bold */
+    }
+}
