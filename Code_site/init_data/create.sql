@@ -5,7 +5,7 @@ CREATE TABLE users (
     phone VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password CHAR(60) NOT NULL,
-    city VARCHAR(100),
+    city TEXT[],
     university_name VARCHAR(100), -- Existing, Optional
     location_preference VARCHAR(100), -- 'Radius', 'Neighborhoods', or 'No preference', Existing
     price_min DECIMAL(10, 2),
@@ -14,7 +14,6 @@ CREATE TABLE users (
     max_area INT,
     furnished BOOLEAN,
     bedrooms VARCHAR(3), -- '1', '2', '3+' to represent the number of bedrooms, Existing
-    -- New fields added below
     gender VARCHAR(10),
     budget NUMERIC,
     location TEXT,
@@ -26,7 +25,7 @@ CREATE TABLE users (
     smoking BOOLEAN,
     drinking BOOLEAN,
     relationship_status VARCHAR(10),
-    hobbies TEXT[], -- Assuming your DB supports array types, else could use TEXT and handle at application level
+    hobbies TEXT, -- Assuming your DB supports array types, else could use TEXT and handle at application level
     language_pref TEXT,
     gender_pref VARCHAR(10),
     sleep_time_pref TIME,
