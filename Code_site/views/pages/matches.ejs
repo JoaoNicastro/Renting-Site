@@ -18,10 +18,22 @@
     </script>
 </head>
 <body>
+    <link rel="stylesheet" href="../css/matches.css">
+    <header class="header">
+        <img src="../img/Logo.png" alt="Unistays Logo" class="unistays-logo">
+    </header>
     <h1>Your Top Matches</h1>
     <div id="matches">
         <% matches.forEach(match => { %>
-            <p><%= match.match %> - Score: <%= match.score %></p>
+            <div class="roommate-card">
+                <img src="../img/phone_noti.png" alt="<%= match.match %> Profile" class="profile-pic">
+                <div class="roommate-info">
+                    <h2><%= match.match %></h2>
+                    <p class="score">Score: <%= match.score %></p>
+                    <p><%= match.bio %></p>
+                    <button class="message-btn">Message</button>
+                </div>
+            </div>
         <% }); %>
     </div>
 </body>
