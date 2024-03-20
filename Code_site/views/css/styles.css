@@ -1,0 +1,707 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+.desktop-navbar-menu {
+    display: none;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column; /* Stacks elements vertically */
+    align-items: stretch; /* Aligns items at the start of the flex container */
+    width: 100%;
+}
+
+.main-container, .image-container {
+    width: 100%; /* Ensures elements take up the full width */
+    padding: 1rem; /* Provides some padding around the content */
+    box-sizing: border-box;
+}
+
+.text-container {
+    width: 70%; /* Ensures elements take up the full width */
+    padding: 0.3rem;
+    box-sizing: border-box;
+    font-size: clamp(0.5rem, 4vw, 1rem); /* Adjusts size dynamically */
+}
+
+.image-container img {
+    width: 100%; /* Makes the image responsive */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.btn-green-yellow {
+    background-color: #CCFF00;
+    color: #000;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.quick-easy-header{
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Adjusts size dynamically */
+    color: #4F3CC9; /* Set the color */
+    font-weight: bold; /* Makes the font bold */
+}
+
+.ideal-student-stay {
+    font-size: clamp(1.5rem, 4vw, 2.5rem); /* Adjusts size dynamically */
+    font-weight: bold; /* Makes the font bold */
+}
+
+/* Base styles for the navbar */
+.navbar {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 3rem;
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Fullscreen Menu Overlay */
+.menu-overlay {
+    height: 0;
+    width: 100%;
+    position: fixed;
+    z-index: 100; /* Ensure it's above other content */
+    top: 0;
+    left: 0;
+    background-color: #000; /* Non-transparent background */
+    overflow-y: hidden; /* Hide scrollbars */
+    transition: height 0.3s ease;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+}
+
+.overlay-logo {
+    height: 3rem; /* Adjust the logo size as needed */
+}
+
+.login-button {
+    margin-right: 3rem;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-size: 1.2rem; /* Increased font size */
+    /* Add a margin-top if you want to move the button down in the flow of the document */
+    
+}
+
+.close-button {
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    position: absolute; /* Positioning the close button absolutely */ /* Aligns top of the button with the header */
+    right: 1rem; /* Keeps the button 1rem from the right edge */
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navbar-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 0.5rem 0;
+}
+
+.navbar-item + hr {
+    border: 0;
+    height: 1px;
+    background-color: #333;
+    width: 90%; /* Line separator width */
+    margin: 0;
+}
+
+/* Adjustments for menu animation */
+.menu-overlay.active {
+    height: 100%; /* When active, show the full screen */
+}
+
+.centered-heading {
+    text-align: center; /* Centers the text horizontally */
+    width: 100%; /* Ensures the heading spans the full width of its container */
+    margin-top: 3rem; /* Adds some space above the heading, adjust as needed */
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: clamp(1.5rem, 4vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
+    /* Add more styling here as needed */
+}
+
+.image-cont img {
+    width: 100%; /* Makes the image span the full width of its container */
+    height: auto; /* Maintains the image's aspect ratio */
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.feature {
+    position:relative;
+    display: flex;
+    flex-direction: column; /* Ensures vertical stacking inside each .col-md-3 */
+    align-items: center;
+    text-align: center; /* This ensures text content is centered horizontally */
+}
+
+.col-md-3 {
+    flex: 1; /* Allows the box to grow and shrink */
+    align-items: center;
+    position:relative;
+    flex-direction: column; /* Ensures vertical stacking inside each .col-md-3 */
+    justify-content: center; /* Optionally adjust vertical spacing */
+    align-items: center; /* Centers content horizontally */
+    border-radius: 20px; /* Moderately rounded corners */
+    background-color: #F7F5F7;
+    margin-left: 1rem;
+    padding-top: 2rem; /* Adjust this value so the content starts below the icon */
+    margin-top: 2rem; /* Add top margin to account for the icon's overlap */
+}
+
+.Housing-paragraph {
+    display: flex;
+    align-items: center;
+}
+
+.circle-icon {
+    position: absolute;
+    top: -3.5rem; /* Moves the icon up halfway out of the container */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* May be necessary if there are stacking context issues */
+    width: 4rem; /* Icon size */
+    height: 4rem; /* Icon size */
+}
+
+.search-container {
+    display: flex; /* Aligns the input and button inline */
+    flex-direction: column; /* Stacks the prompt, input, and button vertically */
+    justify-content: center; /* Centers the flex items */
+    align-items: center; /* Align items horizontally */
+    padding: 0.5rem 2rem; /* 1rem top and bottom, 2rem left and right */
+    border: 2px solid #4F3CC9; /* Purple border */
+    width: 100%; /* Sets the width to fit the contents */
+    margin: auto; /* Center the search container */
+    background-color: #4F3CC9; /* Assuming a white background; adjust as needed */
+    border-radius: 15px; /* Moderately rounded corners */
+    margin-left: 0.4rem;
+}
+
+.search-prompt {
+    color: #fff; /* Purple text to match the border */
+    margin-bottom: 0.5rem; /* Space between the prompt and the search input */
+    align-self: flex-start;
+    text-align: left;
+    font-size: clamp(1rem, 2vw, 1.5rem);; /* Increased font size; adjust as needed */
+    font-weight: bold;
+}
+
+.search-icon {
+    margin-right: 0.5rem; /* Adjust as needed */
+    height: 1.5rem; /* Or the size that fits your design */
+    width: auto; /* To maintain the aspect ratio of the image */
+}
+
+.search-input {
+    border: none; /* Ensures no border around the input */
+    outline: none;
+    border-radius: 20px; /* Moderately rounded corners */
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row; /* Ensures items are in a single row */
+    align-items: center;
+    width: 100%; /* Adjust width as needed */
+}
+
+.search-button {
+    padding: 0.86rem;
+    border-radius: 20px; /* Moderately rounded corners */
+    border: 2px solid #CCFF00; /* Purple border */
+    background-color: #CCFF00; /* Assuming a white background; adjust as needed */
+    width: 30%;
+    color:#4F3CC9;
+    font-size: clamp(0.8rem, 1vw, 2rem);
+    font-weight: bold;
+}
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    border: 2px solid #fff; /* Purple border */
+    background-color: #fff; /* Assuming a white background; adjust as needed */
+    border-radius: 20px; /* Moderately rounded corners */
+    padding: 0.75rem;
+    margin-right: 1rem;
+    width: 60%;
+}
+
+.search-container {
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .flex-container {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start; /* Distributes space between and around content items */
+    }
+
+    .desktop-navbar-menu {
+        display: flex; /* Show desktop navigation */
+        justify-content: center; /* Center items */
+        align-items: center;
+        gap: 1.5rem; /* Adjust the gap between items */
+        margin-right: 1rem
+    }
+
+    .desktop-navbar-menu .navbar-item, .desktop-navbar-menu .find-home-button {
+        /* Adjust font size dynamically with clamp */
+        margin: 0; /* Resets any default margin */
+        padding: 0.5rem; /* Adjust padding as necessary, or reduce if space is tight */
+        font-size: clamp(0.9rem, 2vw, 1.2rem); /* Example: Reduces base font size, adjust as needed */
+    }
+
+    .menu-button {
+        display: none;
+    }
+
+    .main-container, .image-container {
+        flex: 1;
+    }
+
+    .image-container img {
+        width: 100%; /* Ensures the image is fully contained within its element */
+        height: 22rem; /* Maintains aspect ratio */
+        object-fit: contain;
+    }
+
+    .quick-easy-header, .ideal-student-stay {
+        font-size: clamp(1.5rem, 3vw, 3rem); /* Larger font sizes for bigger screens */
+        font-weight: bold; /* Makes the font bold */
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar {
+        /* Ensure the navbar stretches out fully and its content aligns with the main content */
+        max-width: 1200px; /* Or the max-width of your main content for consistency */
+        margin: 0 auto; /* Center the navbar within the viewport */
+    }
+
+    .navbar-brand img {
+        /* Adjust the size if needed for desktop layout */
+        height: 3rem; /* Example adjustment */
+        margin-left: 2rem;
+    }
+
+    /* If the main content is centered within a specific max-width, apply the same rules here */
+    .navbar, .menu-overlay {
+        max-width: 100%; /* Adjust based on your main content's width */
+        margin: auto; /* Center aligning */
+    }
+
+    .menu-header, .menu-container {
+        padding-left: 0; /* Remove any default padding to align content */
+        text-align: left; /* Aligns the text to the left, matching your main content alignment */
+    }
+
+    .navbar-menu, .menu-container {
+        display: flex;
+        justify-content: center; /* Aligns items in the center */
+        gap: 20px; /* Equidistant gaps between items */
+        list-style: none; /* Removes list styling if it's a list */
+        padding: 0; /* Removes default padding */
+        width: 100%; /* Ensures full width */
+    }
+
+    /* Show 'Find Your Stay' button on larger devices */
+    .navbar-button {
+        display: inline-block;
+        background-color: #000;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .navbar-item, .login-button {
+        display: inline-block; /* Aligns items inline with spacing */
+        text-decoration: none; /* Removes underline from links */
+        color: #333; /* Color for text */
+        padding: 10px 20px; /* Spacing around text */
+        margin: 0 10px; /* Margins between items */
+    }
+
+    .find-home-button { /* Add this class to your "Find your new home" button */
+        background-color: #000; /* Background color */
+        color: #fff; /* Text color */
+        border: none; /* Removes border */
+        padding: 10px 20px; /* Padding inside the button */
+        border-radius: 5px; /* Rounded corners */
+        text-decoration: none; /* Removes underline */
+        font-weight: bold; /* Makes the text bold */
+    }
+
+    .login-icon {
+        width: 1.5rem; /* or your preferred size */
+        height: 1.5rem; /* maintain aspect ratio */
+        vertical-align: middle; /* Aligns the icon with the text */
+        margin-right: 0.1rem; /* Space between the icon and text */
+    }
+
+    .row-text-center {
+        display: flex;
+        flex-direction: row; /* Stacks elements vertically */
+    }
+
+    .how-does-it-work-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+        align-items: start; /* Align the items to the start of the container */
+        width: 100%;
+        gap: 0; /* Adjust this if you want some gap between the image and the text */
+    }
+
+    .image-cont {
+        overflow: hidden; /* Ensures nothing overflows this container */
+    }
+
+    .image-cont img {
+        width: 100%; /* Ensures the image is fully responsive and covers the container's width */
+        height: auto; /* Maintains the aspect ratio of the image */
+        object-fit: cover; /* This property makes sure that the image covers the container */
+    }
+    
+    .text-content-container {
+        overflow: auto; /* Enable scrolling within the text container if content exceeds this height */
+    }    
+
+    .text-container {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .small-icon {
+        align-self: center;
+        margin-right: 10px; /* Space between icon and header */
+        width: 3rem; /* Small icon size */
+        height: 3rem; /* Small icon size, assuming square icons */
+    }
+
+    .header-icon-text {
+        background-color: #F7F5F7;
+        display: flex; /* Aligns children (icon and text-container) in a row */
+        align-items: center; /* Centers the children vertically */
+        margin-bottom: 0.5rem;
+        border-radius: 20px; /* Moderately rounded corners */
+    }
+    
+    .header-icon-text h3 {
+        margin: 0;
+        margin-bottom: 0.5rem; /* Space between header and text */
+        font-size: clamp(1rem, 2vw, 1.5rem); /* Decrease the font size of the header */
+        font-weight: bold;
+    }
+    
+    .header-icon-text p {
+        margin-top: 0rem;
+        /* If you need a specific width for the text blocks, set it here */
+        font-size: 0.5rem; /* Decrease the font size of the text */
+    }
+
+    .header-with-icon {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .col-md-3 {
+        flex: 1; /* Allows the box to grow and shrink */
+        align-items: center;
+        position:relative;
+        flex-direction: column; /* Ensures vertical stacking inside each .col-md-3 */
+        justify-content: center; /* Optionally adjust vertical spacing */
+        align-items: center; /* Centers content horizontally */
+        border-radius: 20px; /* Moderately rounded corners */
+        background-color: #F7F5F7;
+        margin-left: 1rem;
+        padding-top: 2rem; /* Adjust this value so the content starts below the icon */
+        margin-top: 2rem; /* Add top margin to account for the icon's overlap */
+    }
+
+    .col-md-3:last-child {
+        margin-right: 3rem;
+    }
+
+    .col-md-3:first-child {
+        margin-left: 3rem;
+    }
+
+    .feature {
+        position:relative;
+        display: flex;
+        flex-direction: column; /* Ensures vertical stacking inside each .col-md-3 */
+        align-items: center;
+        text-align: center; /* This ensures text content is centered horizontally */
+    }
+
+    .circle-icon {
+        position: absolute;
+        top: -3.5rem; /* Moves the icon up halfway out of the container */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10; /* May be necessary if there are stacking context issues */
+        width: 4rem; /* Icon size */
+        height: 4rem; /* Icon size */
+    }
+
+    .Housing-header {
+        margin-top: 0.5rem;
+        font-size: clamp(0.9rem, 2vw, 2rem); /* Larger font sizes for bigger screens */
+    }
+
+    .Housing-paragraph {
+        display: flex;
+        align-items: center;
+        font-size: clamp(0.5rem, 2vw, 0.9rem); /* Larger font sizes for bigger screens */
+    }
+
+    .heading-button-container {
+        text-align: center; /* Centers the content */
+        padding: 1rem; /* Adds space around the container */
+    }
+    
+    .search-container {
+        display: flex; /* Aligns the input and button inline */
+        flex-direction: column; /* Stacks the prompt, input, and button vertically */
+        justify-content: center; /* Centers the flex items */
+        align-items: center; /* Align items horizontally */
+        padding: 0.5rem 2rem; /* 1rem top and bottom, 2rem left and right */
+        border: 2px solid #4F3CC9; /* Purple border */
+        width: 64.375%; /* Sets the width to fit the contents */
+        margin: auto; /* Center the search container */
+        background-color: #4F3CC9; /* Assuming a white background; adjust as needed */
+        border-radius: 15px; /* Moderately rounded corners */
+    }
+    
+    .search-prompt {
+        color: #fff; /* Purple text to match the border */
+        margin-bottom: 0.5rem; /* Space between the prompt and the search input */
+        align-self: flex-start;
+        text-align: left;
+        font-size: clamp(1rem, 2vw, 1.5rem);; /* Increased font size; adjust as needed */
+        margin-left: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .search-icon {
+        margin-right: 0.5rem; /* Adjust as needed */
+        height: 1.5rem; /* Or the size that fits your design */
+        width: auto; /* To maintain the aspect ratio of the image */
+    }
+    
+    .search-input {
+        flex-grow: 1;
+        border: none; /* Ensures no border around the input */
+        outline: none;
+        border-radius: 20px; /* Moderately rounded corners */
+    }
+    
+    .input-group {
+        display: flex;
+        flex-direction: row; /* Ensures items are in a single row */
+        align-items: center;
+        width: 100%; /* Adjust width as needed */
+        margin: 0 0 1rem 0;
+    }
+    
+    .search-button {
+        padding: 0.86rem;
+        border-radius: 20px; /* Moderately rounded corners */
+        border: 2px solid #CCFF00; /* Purple border */
+        background-color: #CCFF00; /* Assuming a white background; adjust as needed */
+        width: 22%;
+        color:#4F3CC9;
+        font-size: clamp(0.8rem, 1vw, 2rem);
+        font-weight: bold;
+    }
+    
+    .input-with-icon {
+        display: flex;
+        align-items: center;
+        border: 2px solid #fff; /* Purple border */
+        background-color: #fff; /* Assuming a white background; adjust as needed */
+        border-radius: 20px; /* Moderately rounded corners */
+        padding: 0.75rem;
+        margin-left: 1rem; /* Adds space to the right, separating from the button */
+        margin-right: 1rem;
+        width: 70%;
+    }
+}
+
+/* Larger screens */
+@media (min-width: 1024px) {
+    .navbar-brand {
+        margin-left: 2.5rem; /* Adjust as needed for very large screens */
+    }
+
+    .main-container {
+        margin-left: 2.5rem; /* Adjust as needed for very large screens */
+    }
+
+    .desktop-navbar-menu {
+        margin-right: 4rem; /* Further increase margin for larger screens */
+    }
+
+    .small-icon {
+        align-self: center;
+        margin-right: 10px; /* Space between icon and header */
+        width: 4rem; /* Small icon size */
+        height: 4rem; /* Small icon size, assuming square icons */
+    }
+
+    .header-icon-text {
+        background-color: #F7F5F7;
+        display: flex; /* Aligns children (icon and text-container) in a row */
+        align-items: center; /* Centers the children vertically */
+        margin-bottom: 1rem;
+    }
+    
+    .header-icon-text p {
+        margin-top: 0rem;
+        /* If you need a specific width for the text blocks, set it here */
+        font-size: 0.7rem; /* Decrease the font size of the text */
+    }
+}
+
+/* Very large screens */
+@media (min-width: 1440px) {
+    .navbar-brand {
+        margin-left: 5rem; /* Adjust as needed for very large screens */
+    }
+
+    .main-container {
+        margin-left: 5rem; /* Adjust as needed for very large screens */
+    }
+
+    .desktop-navbar-menu {
+        margin-right: 9rem; /* Adjust as needed for very large screens */
+    }
+
+    .col-md-3:last-child {
+        margin-right: 10rem;
+    }
+
+    .col-md-3:first-child {
+        margin-left: 10rem;
+    }
+
+    .small-icon {
+        align-self: center;
+        margin-right: 10px; /* Space between icon and header */
+        width: 5rem; /* Small icon size */
+        height: 5rem; /* Small icon size, assuming square icons */
+    }
+
+    .header-icon-text {
+        background-color: #F7F5F7;
+        display: flex; /* Aligns children (icon and text-container) in a row */
+        align-items: center; /* Centers the children vertically */
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .header-icon-text p {
+        margin-top: 0rem;
+        /* If you need a specific width for the text blocks, set it here */
+        font-size: 1rem; /* Decrease the font size of the text */
+    }
+}
+
+@media (min-width: 2560px) {
+    .small-icon {
+        align-self: center;
+        margin-right: 10px; /* Space between icon and header */
+        width: 5rem; /* Small icon size */
+        height: 5rem; /* Small icon size, assuming square icons */
+    }
+
+    .header-icon-text {
+        background-color: #F7F5F7;
+        display: flex; /* Aligns children (icon and text-container) in a row */
+        align-items: center; /* Centers the children vertically */
+        margin-top: 5rem;
+        margin-bottom: 4rem;
+    }
+    
+    .header-icon-text p {
+        margin-top: 0rem;
+        /* If you need a specific width for the text blocks, set it here */
+        font-size: 1rem; /* Decrease the font size of the text */
+    }
+}
+
+@media (max-width: 767px) {
+    .text-content-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Takes the full width of the parent */
+        margin-left: 0.7rem;
+    }
+    
+    .header-icon-text {
+        background-color: #F7F5F7;
+        display: flex; /* Aligns children (icon and text-container) in a row */
+        align-items: center; /* Centers the children vertically */
+        margin-bottom: 0.5rem;
+        border-radius: 20px; /* Moderately rounded corners */
+    }
+
+    .header-icon-text h3 {
+        margin: 0;
+        font-size: clamp(1rem, 2vw, 1.5rem); /* Decrease the font size of the header */
+        font-weight: bold;
+    }
+    
+    .header-icon-text p {
+        margin-top: 0rem;
+        /* If you need a specific width for the text blocks, set it here */
+        font-size: clamp(0.6rem, 2vw, 1rem); /* Decrease the font size of the header */
+    }
+}

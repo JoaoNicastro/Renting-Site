@@ -1,18 +1,45 @@
-<nav class="navbar" style="background-color: #f8f9fa; /* Adjust the background color to match your theme */">
-    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-        <div class="navbar-brand">
-            <a href="/">
-                <img src="/img/logo.png" alt="Logo" style="height: 50px;"> <!-- Adjust the path as needed -->
+<nav class="navbar">
+    <div class="navbar-brand">
+        <a href="/">
+            <img src="../img/Logo.png" alt="Unistays Logo">
+        </a>
+    </div>
+    <!-- Mobile Menu Button -->
+    <button class="menu-button" onclick="toggleMenu()">Menu</button>
+    
+    <!-- Desktop Navigation Items -->
+    <div class="desktop-navbar-menu">
+        <a href="/" class="navbar-item">How it Works</a>
+        <a href="/second" class="navbar-item">Pricing</a>
+        <a href="/third" class="navbar-item">Contact</a>
+        
+        <div class="button-group">
+            <button class="find-home-button">Find Your Stay</button>
+            <a href="/fourth" class="navbar-item login-link">
+                <img src="../img/login.png" alt="Login Icon" class="login-icon">Log In
             </a>
-        </div>
-        <div class="navbar-menu" style="display: flex; gap: 20px;">
-            <a href="/" class="navbar-item" style="text-decoration: none; color: #333;">First page</a>
-            <a href="/second" class="navbar-item" style="text-decoration: none; color: #333;">Second page</a>
-            <a href="/third" class="navbar-item" style="text-decoration: none; color: #333;">Third page</a>
-            <a href="/fourth" class="navbar-item" style="text-decoration: none; color: #333;">Fourth page</a>
-        </div>
-        <div class="navbar-end">
-            <a href="/find-your-stay" class="navbar-item navbar-button" style="background-color: #000; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Find Your Stay</a>
         </div>
     </div>
 </nav>
+
+<div id="menuOverlay" class="menu-overlay">
+    <div class="menu-header">
+        <img src="../img/logo.png" alt="Unistays Logo" class="overlay-logo">
+        <button class="login-button">Log In</button>
+        <button class="close-button" onclick="toggleMenu()">&times;</button>
+    </div>
+    <div class="menu-container">
+        <!-- Mobile Navigation Items -->
+        <a href="/" class="navbar-item">How it Works</a><hr>
+        <a href="/second" class="navbar-item">Pricing</a><hr>
+        <a href="/third" class="navbar-item">Contact</a><hr>
+        <a href="/fourth" class="navbar-item">Log In</a><hr>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    var menuOverlay = document.getElementById("menuOverlay");
+    menuOverlay.classList.toggle("active");
+}
+</script>

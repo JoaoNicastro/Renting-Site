@@ -1,62 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include('../partials/head.ejs') %> <!-- Include the head content -->
     <title>Your Ideal Student Stay</title>
     <!-- Add any specific CSS or scripts for this page -->
 </head>
 <body>
-   <%- include('../partials/menu.ejs') %> <!--  Include the navigation menu -->
-   <link rel="stylesheet" href="../css/styles.css">
-   <header class="info-box" style="padding-left: 20px;"> <!-- Adjust the padding value as needed -->
-    <h1>Your Ideal Student Stay</h1>
-    <h2>Quick and Easy</h2>
-    <p>Discover the smart way to find your next student home. Our service instantly scans hundreds of rental sites to alert you about new listings, drastically improving your chances for a viewing.</p>
-    <p>Say goodbye to the endless search and unsuccessful applications.</p>
-    <a href="#" class="btn btn-primary" style="background-color: #ADFF2F; color: #000; font-weight: bold;" >Find your new home</a>
-
-</header>
+    <%- include('../partials/menu.ejs') %> <!--  Include the navigation menu -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <div class="flex-container">
+        <div class = "main-container">
+            <header class="info-box" style="padding-left: 20px;"> <!-- Adjust the padding value as needed -->
+                <h1 class="ideal-student-stay">Your Ideal Student Stay</h1>
+                <h2 class="quick-easy-header">Quick and Easy</h2>
+                <div class="text-container">
+                    <p>Find your next student home effortlessly. We scan hundreds of rental sites to notifty you about new listings, boosting your viewing chances. No more endless searches or missed opportunities</p>
+                </div>
+                <a href="#" class="btn btn-primary" style="background-color: #CCFF00; color: #000; font-weight: bold;" >Start Now</a>
+            </header>
+        </div>
+            
+        <div class="image-container">
+            <img src="../img/Shot-iphone1.png" alt="Notis">
+        </div>
+    </div>  
     
-    <section class="container mt-5">
-        <h2 class="text-center" style= "font-weight: bold;">Jumpstart Your Housing Hunt</h2>
-        <div class="row text-center">
+    <h2 class="centered-heading">How Does It Work?</h2>
+    
+    <div class="how-does-it-work-container">
+        <div class="image-cont">
+            <img src="../img/Shot.png" alt="Descriptive Text">
+        </div>
+        <div class="text-content-container">
+            <!-- Header 1 with Text and Icon -->
+            <div class="header-icon-text">
+                <img src="../img/Icon.png" alt="Icon 1" class="small-icon">
+                <div class ="text-container">
+                    <h3>Find a roommate</h3>
+                    <p>Speed up and cut the cost of your housing journey. Find and match yourself with roommates going to your university or city! Already have a roommate? Jump to Step 2.</p>
+                </div>
+                
+            </div>
+            <div class="header-icon-text">
+                <img src="../img/Icon.png" alt="Icon 1" class="small-icon">
+                <div class ="text-container">
+                    <h3>Create your search profile</h3>
+                    <p>Set up your search profile, and specify your housing preferences. You can change your preferences at any time. </p>
+                </div>
+            </div>
+            <div class="header-icon-text">
+                <img src="../img/Icon.png" alt="Icon 1" class="small-icon">
+                <div class ="text-container">
+                    <h3>Receive listing notifications</h3>
+                    <p>We scan the web across numerous rental websites for new listings, instantly notifying you on every apartment match. </p>
+                </div>
+            </div>
+            <div class="header-icon-text">
+                <img src="../img/Icon.png" alt="Icon 1" class="small-icon">
+                <div class ="text-container">
+                    <h3>Be the first to respond</h3>
+                    <p>Be the first one to respond and request a viewing, directly to each property.</p>
+                </div>    
+            </div>
+        </div>
+    </div>
+
+    <div class="heading-button-container">
+        <div class="search-container">
+            <span class="search-prompt">Where do you want to live?</span>
+            <div class="input-group">
+                <div class="input-with-icon">
+                    <img src="../img/search.png" alt="Search" class="search-icon">
+                    <input type="text" placeholder="Search City" class="search-input">
+                </div>
+                <button class="search-button">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="centered-heading" style= "font-weight: bold;">Jumpstart Your Housing Hunt</h2>
+
+    <section class="container-mt-5">
+        <div class="row-text-center">
             <!-- Rental Alerts -->
             <div class="col-md-3">
-                <div class="feature">
-                    <img src="/path/to/rental-alerts-icon.png" alt="Rental Alerts Icon">
-                    <h3>Rental Alerts</h3>
-                    <p>Receive instant updates on new listings that fit your preferences, ensuring you never miss a housing opportunity again. Stay ahead of the game.</p>
+                <div class="feature"> 
+                    <img src="../img/Icon.png" alt="Rental Alerts Icon" class="circle-icon">
+                    <h3 class="Housing-header">Rental Alerts</h3>
+                    <p class="Housing-paragraph">Receive instant updates on new listings that fit your preferences, ensuring you never miss a housing opportunity again. Stay ahead of the game.</p>
                 </div>
             </div>
             <!-- Roommate Match -->
             <div class="col-md-3">
                 <div class="feature">
-                    <img src="/path/to/roommate-match-icon.png" alt="Roommate Match Icon">
-                    <h3>Roommate Match</h3>
-                    <p>Reduce your rental expenses and streamline your search. Find a compatible roommate on our platform and secure your ideal home together.</p>
+                    <img src="../img/Icon.png" alt="Roommate Match Icon" class="circle-icon">
+                    <h3 class="Housing-header">Roommate Match</h3>
+                    <p class="Housing-paragraph">Reduce your rental expenses and streamline your search. Find a compatible roommate on our platform and secure your ideal home together.</p>
                 </div>
             </div>
             <!-- Automatic Reply -->
             <div class="col-md-3">
                 <div class="feature">
-                    <img src="/path/to/automatic-reply-icon.png" alt="Automatic Reply Icon">
-                    <h3>Automatic Reply</h3>
-                    <p>Secure viewings quickly with our automatic responder, putting your application at the forefront effortlessly.</p>
+                    <img src="../img/Icon.png" alt="Automatic Reply Icon" class="circle-icon">
+                    <h3 class="Housing-header">Automatic Reply</h3>
+                    <p class="Housing-paragraph">Secure viewings quickly with our automatic responder, putting your application at the forefront effortlessly.</p>
                 </div>
             </div>
             <!-- 14 Days Free Trial -->
             <div class="col-md-3">
                 <div class="feature">
-                    <img src="/path/to/free-trial-icon.png" alt="14 Days Free Trial Icon">
-                    <h3>14 Days Free Trial</h3>
-                    <p>Test our platform with a 14-day free trial. Save hours of searching with no commitment.</p>
+                    <img src="../img/Icon.png" alt="14 Days Free Trial Icon" class="circle-icon">
+                    <h3 class="Housing-header">14 Days Free Trial</h3>
+                    <p class="Housing-paragraph">Test our platform with a 14-day free trial. Save hours of searching with no commitment.</p>
                 </div>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <a href="#" class="btn btn-primary" style="background-color: #000000; color: #ffffff;">Find your new home</a>
-        </div>
     </section>
+
+    <div class="text-center mt-4">
+        <a href="#" class="btn btn-primary" style="background-color: #000000; color: #ffffff;">Start Now</a>
+    </div>
 
     <%- include('../partials/footer.ejs') %> <!-- Include the footer content -->
 </body>

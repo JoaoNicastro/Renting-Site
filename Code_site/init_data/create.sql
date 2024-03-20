@@ -42,5 +42,6 @@ CREATE TABLE compatibility_scores (
     user_id_b VARCHAR(50) REFERENCES users(username),
     score DECIMAL(10, 2) NOT NULL CHECK (score >= 0),
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_pair UNIQUE (user_id_a, user_id_b)
 );

@@ -1,139 +1,143 @@
-<%- include('../partials/head'); %>
-<%- include('../partials/menu'); %>
-
-<!-- Get Started Button triggers the modal -->
-<button id="myBtn" class="btn btn-primary btn-lg">Get Started</button>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <div class="modal-header">
-    <h4>Step 1/4</h4>
-  </div>
-  <div class="modal-left">
-    <h4>🔥 With this search profile you can expect ... matches per week</h4>
-    <input type="text" id="citySearch" placeholder="Search city" />
-  </div>
-  <div class="modal-right" style="display: flex; align-items: center; justify-content: center; height: 100%; padding-right: 20px;">
-    <div id="map" style="height: 449px; width: 442.35px;"></div>
-  </div>
-  <div class="modal-footer" style="text-align: center;">
-    <button id="nextButton" class="btn btn-primary" style="width: 901px; height: 49.33px;">Next</button>
-  </div>  
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include your head partial which contains the meta tags and stylesheets -->
+    <%- include('../partials/head'); %>
+</head>
+<body>
+    <!-- Include your menu partial -->
 
 
-<%- include('../partials/footer'); %>
+    <!-- Trigger Button for the Modal -->
+    <button id="getStartedBtn" class="btn btn-primary btn-lg">Get Started</button>
 
-<!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Multi-Step Modal Structure -->
+    <div id="multiStepModal" class="modal">
+        <!-- Modal content container -->
+        <div class="modal-content">
+            <!-- Close button -->
+            <span class="close">&times;</span>
 
-<script>
-  // Set your Mapbox access token
-  mapboxgl.accessToken = 'pk.eyJ1IjoidW5pc3RheXMiLCJhIjoiY2x0cXNub3VtMDdvdDJpcnoxc2Npc2s5YSJ9.agPsL_8WDUTq8PDqpPZqbQ';
+            <!-- Step indicator -->
+            <div class="step-indicator">Step <span id="currentStep">1</span>/4</div>
 
-  // Get the modal element
-  var modal = document.getElementById('myModal');
-  // Get the button that opens the modal
-  var btn = document.getElementById('myBtn');
-  // Get the <span> element that closes the modal
-  var span = document.getElementById('closeModal');
-  // Get the map element
-  var mapElement = document.getElementById('map');
-  // Store the map object
-  var map = null;
+            <!-- Dynamic modal body content -->
+            <div id="modalBodyContent">
+                <!-- Content for Step 1 will be loaded here initially -->
+            </div>
 
-  // Function to initialize the map
-  function initializeMap() {
-    map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [4.899, 52.372], // starting position [lng, lat]
-      zoom: 9 // starting zoom
-    });
-  }
+            <!-- Modal footer with the Next button -->
+            <div class="modal-footer">
+                <button id="nextBtn" class="btn btn-primary">Next</button>
+            </div>
+        </div>
+    </div>
 
-  // When the user clicks the button, open the modal
-  btn.onclick = function() {
-    modal.style.display = "flex";
-    // Initialize the map only if it hasn't been initialized yet
-    if (!map) {
-      initializeMap();
-    }
-  };
+    <!-- Include your footer partial -->
+    <%- include('../partials/footer'); %>
 
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
-  };
+    <!-- Include jQuery and other necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
 
-  // When the user clicks anywhere outside of the modal content, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-  
-  $(document).ready(function() {
-  $('#nextButton').on('click', function() {
-    // Trigger the animation
-    $(this).animate({
-      opacity: 0.5,
-    }, 500, function() {
-      // After the animation, load the new popup content
-      $('#yourPopupContainer').load('/path-to-new-popup');
-    });
+      // Set your Mapbox access token
+          mapboxgl.accessToken = 'pk.eyJ1IjoidW5pc3RheXMiLCJhIjoiY2x0cXNub3VtMDdvdDJpcnoxc2Npc2s5YSJ9.agPsL_8WDUTq8PDqpPZqbQ';
 
-    // Use AJAX to send data to the server to save in the database
-    $.ajax({
-      type: 'POST',
-      url: '/save-data-endpoint',
-      data: {
-        // Data to be sent to the server for saving
-        // You need to collect this data from your form or wherever it is available
-      },
-      success: function(response) {
-        console.log('Data saved successfully');
-      },
-      error: function(error) {
-        console.log('Error saving data', error);
-      }
-    });
-  });
-});
+        // Get the modal element
+        var modal = document.getElementById('myModal');
+        // Get the button that opens the modal
+        var btn = document.getElementById('myBtn');
+        // Get the <span> element that closes the modal
+        var span = document.getElementById('closeModal');
+        // Get the map element
+        var mapElement = document.getElementById('map');
+        // Store the map object
+        var map = null;
 
-var currentStep = 1;
+        // Function to initialize the map
+        function initializeMap() {
+          map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [4.899, 52.372], // starting position [lng, lat]
+            zoom: 9 // starting zoom
+          });
+        }
 
-$(document).ready(function() {
-  $('#nextButton').on('click', function() {
-    // Increment the step
-    currentStep++;
+        $(document).ready(function() {
+            var currentStep = 1;
 
-    // Check if we need to update the step in the modal
-    if (currentStep <= 4) {
-      // Update the modal header to the new step
-      $('.modal-header h4').text(`Step ${currentStep}/4`);
-      // You can also add conditional content changes for each step here
-      switch(currentStep) {
-        case 2:
-          // Update the modal content for step 2
-          break;
-        // Add cases for further steps if different content is needed
-      }
-    } else {
-      // Reset or close the modal if the steps are completed
-      currentStep = 1; // Reset to start or implement closing functionality
-      modal.style.display = "none"; // Example of closing the modal
-    }
+            // Function to load content for the current step
+            function loadStepContent(step) {
+                var contentHtml = '';
 
-    // Prevent the default action to stay on the current popup
-    event.preventDefault();
-  });
-});
+                switch(step) {
+                    case 1:
+                        // Content for Step 1
+                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                                       <input type="text" placeholder="Search city" />
+                                       <select name="distance"><option value="<2km">< 2km</option></select>`;
+                        break;
+                    case 2:
+                        // Content for Step 2
+                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                                       <input type="number" placeholder="Minimum rental price" />
+                                       <input type="number" placeholder="Maximum rental price" />
+                                       <input type="number" placeholder="Minimum number of bedrooms" />`;
+                        break;
+                    case 3:
+                        // Content for Step 3
+                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                                       <select name="furnished"><option value="Doesn't matter">Doesn't matter</option></select>
+                                       <div><input type="checkbox" /> Garden</div>
+                                       <div><input type="checkbox" /> Balcony</div>`;
+                        break;
+                    case 4:
+                        // Content for Step 4
+                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                                       <input type="text" placeholder="First name" />
+                                       <input type="text" placeholder="Email" />
+                                       <input type="password" placeholder="Password" />`;
+                        break;
+                    // Add more cases if you have more steps
+                }
 
-</script>
+                $('#modalBodyContent').html(contentHtml);
+                $('#currentStep').text(step);
+            }
+
+            // Open modal on Get Started button click
+            $('#getStartedBtn').on('click', function() {
+                $('#multiStepModal').show();
+                loadStepContent(currentStep); // Load the first step content
+            });
+
+            // Close modal on close button click
+            $('.close').on('click', function() {
+                $('#multiStepModal').hide();
+            });
+
+            // Handle the Next button click
+            $('#nextBtn').on('click', function() {
+                if (currentStep < 4) {
+                    currentStep++;
+                    loadStepContent(currentStep);
+                } else {
+                    // Submit the form or close the modal if you're on the last step
+                    $('#multiStepModal').hide();
+                    currentStep = 1; // Reset to first step for the next opening
+                    // Here you should handle form submission or transition to the next page
+                }
+            });
+
+            // Close modal when clicking outside of it
+            $(window).on('click', function(event) {
+                if ($(event.target).is('.modal')) {
+                    $('#multiStepModal').hide();
+                }
+            });
+        });
+    </script>
 
 <style>
   .modal {
