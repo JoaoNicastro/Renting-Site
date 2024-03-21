@@ -26,13 +26,15 @@
     <div id="matches">
         <% matches.forEach(match => { %>
             <div class="roommate-card">
-                <img src="../img/phone_noti.png" alt="<%= match.match %> Profile" class="profile-pic">
+                <img src="../img/profile-pic.jpg" alt="<%= match.match %> Profile" class="profile-pic">
                 <div class="roommate-info">
-                    <h2><%= match.match %></h2>
-                    <p class="score">Score: <%= match.score %></p>
-                    <p><%= match.bio %></p>
-                    <button class="message-btn">Message</button>
+                    <p class="location">Roomate - Amsterdam</p>
+                    <h2 class="name"><%= match.match %></h2>
+                    <p class="price">€1000 EUR/month</p>
                 </div>
+                <p class="score">Score: <%= match.score %></p>
+                <p><%= match.bio %></p>
+                <button class="message-btn">Message</button>
             </div>
         <% }); %>
     </div>

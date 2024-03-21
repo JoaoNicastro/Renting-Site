@@ -4,6 +4,15 @@
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
 }
 
+.btn-primary:focus {
+    outline: 2px solid #000000; /* Example: change to a solid yellow outline */
+}
+
+.btn-primary {
+    border: none !important;
+    box-shadow: none !important;
+}
+
 .desktop-navbar-menu {
     display: none;
 }
@@ -272,7 +281,25 @@
 }
 
 @media (min-width: 768px) {
+    body {
+        background-color: #fff; /* Base color */
+        background-image: 
+            radial-gradient(circle at 30% 50%, rgba(200,150,255,.4), transparent 40%),
+            radial-gradient(circle at 75% 25%, rgba(200,255,200,.4), transparent 40%),
+            radial-gradient(circle at 50% 75%, rgba(200,255,200,.4), transparent 40%);
+        background-repeat: no-repeat;
+    }
+
+    .container-mt-5 {
+        padding-bottom: 1rem;
+    }
+
+    .centered-heading {
+        padding-top: 2rem;
+    }
+
     .flex-container {
+        padding-top: 5rem;
         display: flex;
         flex-direction: row;
         align-items: flex-start; /* Distributes space between and around content items */
@@ -307,6 +334,10 @@
         object-fit: contain;
     }
 
+    .info-box {
+        margin-top: 1rem;
+    }
+
     .quick-easy-header, .ideal-student-stay {
         font-size: clamp(1.5rem, 3vw, 3rem); /* Larger font sizes for bigger screens */
         font-weight: bold; /* Makes the font bold */
@@ -320,6 +351,7 @@
 
     .navbar {
         /* Ensure the navbar stretches out fully and its content aligns with the main content */
+        background-color: transparent;
         max-width: 1200px; /* Or the max-width of your main content for consistency */
         margin: 0 auto; /* Center the navbar within the viewport */
     }
@@ -391,6 +423,7 @@
     }
 
     .how-does-it-work-container {
+        padding-bottom: 7rem;
         display: grid;
         grid-template-columns: 1fr 1fr; /* Two equal-width columns */
         align-items: start; /* Align the items to the start of the container */
@@ -577,6 +610,10 @@
 
 /* Larger screens */
 @media (min-width: 1024px) {
+    .info-box {
+        margin-top: 2rem;
+    }
+
     .navbar-brand {
         margin-left: 2.5rem; /* Adjust as needed for very large screens */
     }

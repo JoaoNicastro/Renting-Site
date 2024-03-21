@@ -36,6 +36,10 @@ CREATE TABLE users (
     relationship_pref VARCHAR(10)
 );
 
+-- docker exec -it code_site-db-1 psql -U postgres -d users_db
+-- \dt
+-- SELECT * FROM compatibility_scores;
+
 
 CREATE TABLE compatibility_scores (
     id SERIAL PRIMARY KEY,
