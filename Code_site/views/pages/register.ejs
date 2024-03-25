@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Include your head partial which contains the meta tags and stylesheets -->
     <%- include('../partials/head'); %>
+
 </head>
 <body>
-    <!-- Include your menu partial -->
+   
 
-
-    <!-- Trigger Button for the Modal -->
     <button id="getStartedBtn" class="btn btn-primary btn-lg">Get Started</button>
 
-    <!-- Multi-Step Modal Structure -->
     <div id="multiStepModal" class="modal">
-        <!-- Modal content container -->
         <div class="modal-content">
-            <!-- Close button -->
             <span class="close">&times;</span>
-
-            <!-- Step indicator -->
-            <div class="step-indicator">Step <span id="currentStep">1</span>/4</div>
-
-            <!-- Dynamic modal body content -->
-            <div id="modalBodyContent">
-                <!-- Content for Step 1 will be loaded here initially -->
+            <div class="modal-header">
+                <h2>Step <span id="currentStep">1</span>/4</h2>
             </div>
-
-            <!-- Modal footer with the Next button -->
+            <div id="modalBodyContent" class="modal-body">
+                <!-- Content will be loaded dynamically -->
+            </div>
             <div class="modal-footer">
                 <button id="nextBtn" class="btn btn-primary">Next</button>
             </div>
@@ -38,78 +29,67 @@
 
     <!-- Include jQuery and other necessary scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
     <script>
+  // Set your Mapbox access token
+  mapboxgl.accessToken = 'pk.eyJ1IjoidW5pc3RheXMiLCJhIjoiY2x0cXNrcGNrMDlzbTJrcGUxMGNpZ3UzdSJ9.HgD1_IEIhHstVUu0OWTL2Q';
 
-      // Set your Mapbox access token
-          mapboxgl.accessToken = 'pk.eyJ1IjoidW5pc3RheXMiLCJhIjoiY2x0cXNub3VtMDdvdDJpcnoxc2Npc2s5YSJ9.agPsL_8WDUTq8PDqpPZqbQ';
-
-        // Get the modal element
-        var modal = document.getElementById('myModal');
-        // Get the button that opens the modal
-        var btn = document.getElementById('myBtn');
-        // Get the <span> element that closes the modal
-        var span = document.getElementById('closeModal');
-        // Get the map element
-        var mapElement = document.getElementById('map');
-        // Store the map object
-        var map = null;
-
-        // Function to initialize the map
-        function initializeMap() {
-          map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: 'mapbox://styles/mapbox/streets-v11', // style URL
-            center: [4.899, 52.372], // starting position [lng, lat]
-            zoom: 9 // starting zoom
-          });
+  // Function to initialize the map
+  function initializeMap() {
+            if (!document.getElementById('map')) return; // Only initialize if map element is present
+            new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [4.899, 52.372],
+                zoom: 9
+            });
         }
 
         $(document).ready(function() {
             var currentStep = 1;
+            var isMapInitialized = false;
 
             // Function to load content for the current step
             function loadStepContent(step) {
                 var contentHtml = '';
+                $('#currentStep').text(step);
 
                 switch(step) {
                     case 1:
-                        // Content for Step 1
-                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
-                                       <input type="text" placeholder="Search city" />
-                                       <select name="distance"><option value="<2km">< 2km</option></select>`;
+                    ContentHtml += `<div id="map" style="width: 100%; height: 300px;"></div>`;
+                        $('#modalBodyContent').html(contentHtml);
+                        initializeMap(); // Initialize the map
                         break;
                     case 2:
                         // Content for Step 2
-                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                        contentHtml += `<h4>🔥 With this search profile you can expect ... matches per week</h4>
                                        <input type="number" placeholder="Minimum rental price" />
                                        <input type="number" placeholder="Maximum rental price" />
                                        <input type="number" placeholder="Minimum number of bedrooms" />`;
+                                   
                         break;
                     case 3:
                         // Content for Step 3
-                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                        contentHtml += `<h4>🔥 With this search profile you can expect ... matches per week</h4>
                                        <select name="furnished"><option value="Doesn't matter">Doesn't matter</option></select>
                                        <div><input type="checkbox" /> Garden</div>
                                        <div><input type="checkbox" /> Balcony</div>`;
                         break;
                     case 4:
                         // Content for Step 4
-                        contentHtml = `<h4>🔥 With this search profile you can expect ... matches per week</h4>
+                        contentHtml += `<h4>🔥 With this search profile you can expect ... matches per week</h4>
                                        <input type="text" placeholder="First name" />
                                        <input type="text" placeholder="Email" />
                                        <input type="password" placeholder="Password" />`;
                         break;
                     // Add more cases if you have more steps
                 }
-
                 $('#modalBodyContent').html(contentHtml);
-                $('#currentStep').text(step);
             }
 
-            // Open modal on Get Started button click
-            $('#getStartedBtn').on('click', function() {
+            $('#getStartedBtn').click(function() {
                 $('#multiStepModal').show();
-                loadStepContent(currentStep); // Load the first step content
+                loadStepContent(currentStep);
             });
 
             // Close modal on close button click
@@ -118,15 +98,16 @@
             });
 
             // Handle the Next button click
-            $('#nextBtn').on('click', function() {
-                if (currentStep < 4) {
+            $('#nextBtn').click(function() {
+                if(currentStep < 4) {
                     currentStep++;
                     loadStepContent(currentStep);
                 } else {
-                    // Submit the form or close the modal if you're on the last step
                     $('#multiStepModal').hide();
-                    currentStep = 1; // Reset to first step for the next opening
-                    // Here you should handle form submission or transition to the next page
+                    currentStep = 1;
+                    $('#nextBtn').text('Next');
+                    loadStepContent(currentStep);
+                    // Here you would handle the final step's data submission.
                 }
             });
 
@@ -138,7 +119,7 @@
             });
         });
     </script>
-
+  </body>
 <style>
   .modal {
     display: none;
