@@ -4,6 +4,12 @@
     box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
 }
 
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .btn-primary:focus {
     outline: 2px solid #000000; /* Example: change to a solid yellow outline */
 }
@@ -26,20 +32,27 @@
 
 .main-container, .image-container {
     width: 100%; /* Ensures elements take up the full width */
-    padding: 1rem; /* Provides some padding around the content */
     box-sizing: border-box;
 }
 
 .text-container {
-    width: 70%; /* Ensures elements take up the full width */
+    width: 80%; /* Ensures elements take up the full width */
     padding: 0.3rem;
     box-sizing: border-box;
     font-size: clamp(0.5rem, 4vw, 1rem); /* Adjusts size dynamically */
 }
 
+.image-container {
+    display: grid;
+    place-items: center;
+    margin-left: 0.5rem;
+}
+
 .image-container img {
+    padding-top: 1rem;
     width: 100%; /* Makes the image responsive */
     height: auto; /* Maintain aspect ratio */
+
 }
 
 .btn-green-yellow {
@@ -160,7 +173,7 @@
     text-align: center; /* Centers the text horizontally */
     width: 100%; /* Ensures the heading spans the full width of its container */
     margin-top: 3rem; /* Adds some space above the heading, adjust as needed */
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
     font-weight: bold;
     font-size: clamp(1.5rem, 4vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
     /* Add more styling here as needed */
@@ -191,7 +204,7 @@
     align-items: center; /* Centers content horizontally */
     border-radius: 20px; /* Moderately rounded corners */
     background-color: #F7F5F7;
-    margin-left: 1rem;
+    margin-left: 0.2rem;
     padding-top: 2rem; /* Adjust this value so the content starts below the icon */
     margin-top: 2rem; /* Add top margin to account for the icon's overlap */
 }
@@ -204,9 +217,6 @@
 .circle-icon {
     position: absolute;
     top: -3.5rem; /* Moves the icon up halfway out of the container */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10; /* May be necessary if there are stacking context issues */
     width: 4rem; /* Icon size */
     height: 4rem; /* Icon size */
 }
@@ -230,7 +240,7 @@
     margin-bottom: 0.5rem; /* Space between the prompt and the search input */
     align-self: flex-start;
     text-align: left;
-    font-size: clamp(1rem, 2vw, 1.5rem);; /* Increased font size; adjust as needed */
+    font-size: clamp(1rem, 2vw, 1.5rem); /* Increased font size; adjust as needed */
     font-weight: bold;
 }
 
@@ -280,18 +290,57 @@
     box-sizing: border-box;
 }
 
+.info-box {
+    padding-left: 2rem;
+}
+
+.navbar {
+    /* Ensure the navbar stretches out fully and its content aligns with the main content */
+    background-color: transparent;
+    max-width: 1200px; /* Or the max-width of your main content for consistency */
+    margin: 0 auto; /* Center the navbar within the viewport */
+}
+
+.header-icon-text {
+    background-color: #F7F5F7;
+    display: flex; /* Aligns children (icon and text-container) in a row */
+    align-items: center; /* Centers the children vertically */
+    border-radius: 20px; /* Moderately rounded corners */
+    margin-bottom: clamp(0.5rem, 1.75vw, 3rem);
+}
+
+.header-icon-text h3 {
+    font-size: clamp(1.2rem, 1.5vw, 1.5rem); /* Decrease the font size of the header */
+    font-weight: bold;
+}
+
+.header-icon-text p {
+    /* If you need a specific width for the text blocks, set it here */
+    font-size: clamp(0.75rem, 1vw, 1rem); /* Decrease the font size of the text */
+}
+
+.Housing-header {
+    font-size: clamp(1.2rem, 1.5vw, 1.5rem); /* Larger font sizes for bigger screens */
+    font-weight: bold;
+}
+
+.Housing-paragraph {
+    font-size: clamp(0.75rem, 1vw, 1rem);
+}
+
 @media (min-width: 768px) {
     body {
         background-color: #fff; /* Base color */
         background-image: 
-            radial-gradient(circle at 30% 50%, rgba(200,150,255,.4), transparent 40%),
-            radial-gradient(circle at 75% 25%, rgba(200,255,200,.4), transparent 40%),
-            radial-gradient(circle at 50% 75%, rgba(200,255,200,.4), transparent 40%);
+            radial-gradient(circle at 25% 47%, rgba(79, 60, 201, 0.25), transparent 40%),
+            radial-gradient(circle at 85% 13%, rgba(204, 255, 0, 0.12), transparent 30%),
+            radial-gradient(circle at 50% 81.5%, rgba(204, 255, 0, 0.12), transparent 35%);
         background-repeat: no-repeat;
     }
 
-    .container-mt-5 {
-        padding-bottom: 1rem;
+    .content-limiter {
+        padding-right: 8%;
+        position: relative;
     }
 
     .centered-heading {
@@ -302,22 +351,20 @@
         padding-top: 5rem;
         display: flex;
         flex-direction: row;
-        align-items: flex-start; /* Distributes space between and around content items */
     }
 
     .desktop-navbar-menu {
         display: flex; /* Show desktop navigation */
         justify-content: center; /* Center items */
         align-items: center;
-        gap: 1.5rem; /* Adjust the gap between items */
-        margin-right: 1rem
+        gap: clamp(0.7rem, 2vw, 1.5rem); /* Adjust the gap between items */
     }
 
     .desktop-navbar-menu .navbar-item, .desktop-navbar-menu .find-home-button {
         /* Adjust font size dynamically with clamp */
         margin: 0; /* Resets any default margin */
         padding: 0.5rem; /* Adjust padding as necessary, or reduce if space is tight */
-        font-size: clamp(0.9rem, 2vw, 1.2rem); /* Example: Reduces base font size, adjust as needed */
+        font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* Example: Reduces base font size, adjust as needed */
     }
 
     .menu-button {
@@ -332,6 +379,7 @@
         width: 100%; /* Ensures the image is fully contained within its element */
         height: 22rem; /* Maintains aspect ratio */
         object-fit: contain;
+        object-position: right center; /* Adjusts positioning to favor the right */
     }
 
     .info-box {
@@ -347,13 +395,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-    .navbar {
-        /* Ensure the navbar stretches out fully and its content aligns with the main content */
-        background-color: transparent;
-        max-width: 1200px; /* Or the max-width of your main content for consistency */
-        margin: 0 auto; /* Center the navbar within the viewport */
     }
 
     .navbar-brand img {
@@ -425,7 +466,7 @@
     .how-does-it-work-container {
         padding-bottom: 7rem;
         display: grid;
-        grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+        grid-template-columns: 55% 45%; /* Two equal-width columns */
         align-items: start; /* Align the items to the start of the container */
         width: 100%;
         gap: 0; /* Adjust this if you want some gap between the image and the text */
@@ -452,30 +493,31 @@
     
     .small-icon {
         align-self: center;
-        margin-right: 10px; /* Space between icon and header */
-        width: 3rem; /* Small icon size */
-        height: 3rem; /* Small icon size, assuming square icons */
+        margin-left: 0.75rem; /* Space between icon and header */
+        margin-right: 0.25rem;
+        width: clamp(2rem, 5vw, 5rem); /* Small icon size */
+        height: clamp(2rem, 5vw, 5rem); /* Small icon size, assuming square icons */
     }
 
     .header-icon-text {
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
         align-items: center; /* Centers the children vertically */
-        margin-bottom: 0.5rem;
         border-radius: 20px; /* Moderately rounded corners */
+        margin-bottom: clamp(0.5rem, 1.75vw, 3rem);
+        height: clamp(4rem, 8.75vw, 10rem);
     }
     
     .header-icon-text h3 {
-        margin: 0;
-        margin-bottom: 0.5rem; /* Space between header and text */
-        font-size: clamp(1rem, 2vw, 1.5rem); /* Decrease the font size of the header */
+        margin-bottom: -0.05rem;
+        margin-top: 0.65rem;
+        font-size: clamp(0.5rem, 1.5vw, 1.5rem); /* Decrease the font size of the header */
         font-weight: bold;
     }
     
     .header-icon-text p {
-        margin-top: 0rem;
         /* If you need a specific width for the text blocks, set it here */
-        font-size: 0.5rem; /* Decrease the font size of the text */
+        font-size: clamp(0.25rem, 1vw, 1rem); /* Decrease the font size of the text */
     }
 
     .header-with-icon {
@@ -516,23 +558,19 @@
 
     .circle-icon {
         position: absolute;
-        top: -3.5rem; /* Moves the icon up halfway out of the container */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10; /* May be necessary if there are stacking context issues */
-        width: 4rem; /* Icon size */
-        height: 4rem; /* Icon size */
+        width: clamp(3rem, 5vw, 4rem); /* Small icon size */
+        height: clamp(3rem, 5vw, 4rem);
     }
 
     .Housing-header {
-        margin-top: 0.5rem;
-        font-size: clamp(0.9rem, 2vw, 2rem); /* Larger font sizes for bigger screens */
+        font-size: clamp(0.85rem, 1.5vw, 1.5rem); /* Larger font sizes for bigger screens */
+        font-weight: bold;
     }
 
     .Housing-paragraph {
         display: flex;
         align-items: center;
-        font-size: clamp(0.5rem, 2vw, 0.9rem); /* Larger font sizes for bigger screens */
+        font-size: clamp(0.25rem, 1vw, 1rem); /* Larger font sizes for bigger screens */
     }
 
     .heading-button-container {
@@ -558,7 +596,7 @@
         margin-bottom: 0.5rem; /* Space between the prompt and the search input */
         align-self: flex-start;
         text-align: left;
-        font-size: clamp(1rem, 2vw, 1.5rem);; /* Increased font size; adjust as needed */
+        font-size: clamp(0.8rem, 1.5vw, 1.5rem); /* Increased font size; adjust as needed */
         margin-left: 1.5rem;
         font-weight: bold;
     }
@@ -622,28 +660,10 @@
         margin-left: 2.5rem; /* Adjust as needed for very large screens */
     }
 
-    .desktop-navbar-menu {
-        margin-right: 4rem; /* Further increase margin for larger screens */
-    }
-
-    .small-icon {
-        align-self: center;
-        margin-right: 10px; /* Space between icon and header */
-        width: 4rem; /* Small icon size */
-        height: 4rem; /* Small icon size, assuming square icons */
-    }
-
     .header-icon-text {
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
         align-items: center; /* Centers the children vertically */
-        margin-bottom: 1rem;
-    }
-    
-    .header-icon-text p {
-        margin-top: 0rem;
-        /* If you need a specific width for the text blocks, set it here */
-        font-size: 0.7rem; /* Decrease the font size of the text */
     }
 }
 
@@ -657,10 +677,6 @@
         margin-left: 5rem; /* Adjust as needed for very large screens */
     }
 
-    .desktop-navbar-menu {
-        margin-right: 9rem; /* Adjust as needed for very large screens */
-    }
-
     .col-md-3:last-child {
         margin-right: 10rem;
     }
@@ -669,48 +685,18 @@
         margin-left: 10rem;
     }
 
-    .small-icon {
-        align-self: center;
-        margin-right: 10px; /* Space between icon and header */
-        width: 5rem; /* Small icon size */
-        height: 5rem; /* Small icon size, assuming square icons */
-    }
-
     .header-icon-text {
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
         align-items: center; /* Centers the children vertically */
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-    }
-    
-    .header-icon-text p {
-        margin-top: 0rem;
-        /* If you need a specific width for the text blocks, set it here */
-        font-size: 1rem; /* Decrease the font size of the text */
     }
 }
 
 @media (min-width: 2560px) {
-    .small-icon {
-        align-self: center;
-        margin-right: 10px; /* Space between icon and header */
-        width: 5rem; /* Small icon size */
-        height: 5rem; /* Small icon size, assuming square icons */
-    }
-
     .header-icon-text {
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
         align-items: center; /* Centers the children vertically */
-        margin-top: 5rem;
-        margin-bottom: 4rem;
-    }
-    
-    .header-icon-text p {
-        margin-top: 0rem;
-        /* If you need a specific width for the text blocks, set it here */
-        font-size: 1rem; /* Decrease the font size of the text */
     }
 }
 
@@ -726,18 +712,15 @@
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
         align-items: center; /* Centers the children vertically */
-        margin-bottom: 0.5rem;
         border-radius: 20px; /* Moderately rounded corners */
     }
 
     .header-icon-text h3 {
-        margin: 0;
         font-size: clamp(1rem, 2vw, 1.5rem); /* Decrease the font size of the header */
         font-weight: bold;
     }
     
     .header-icon-text p {
-        margin-top: 0rem;
         /* If you need a specific width for the text blocks, set it here */
         font-size: clamp(0.6rem, 2vw, 1rem); /* Decrease the font size of the header */
     }

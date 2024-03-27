@@ -50,3 +50,11 @@ CREATE TABLE compatibility_scores (
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT unique_user_pair UNIQUE (user_id_a, user_id_b)
 );
+
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  from_username VARCHAR(255) NOT NULL,
+  to_username VARCHAR(255) NOT NULL,
+  text TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

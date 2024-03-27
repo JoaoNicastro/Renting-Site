@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat App</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <input type="text" id="messageInput">
+    <button onclick="sendMessage()">Send</button>
+    <div id="messages"></div>
+
+    <script>
+        const socket = io(); // Initialize Socket.IO client
+
+        // Function to send a message
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const text = messageInput.value;
+            const from = '<%= currentUserUsername %>'; // Set by server-side EJS templating
+            const to = '<%= otherUserUsername %>'; // Set by server-side EJS templating
+
+            if(text.trim() === '') return; // Don't send empty messages
+
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `${from}: ${text}`; // Display who the message is from
+            messagesDiv.appendChild(messageElement);
+
+            // Emit the message to the server
+            socket.emit('chat message', { from, to, text });
+            messageInput.value = ''; // Clear input after sending
+        }
+
+        // Listen for incoming messages
+        socket.on('chat message', (msg) => {
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `${msg.from}: ${msg.text}`; // Display who the message is from
+            messagesDiv.appendChild(messageElement);
+        });
+
+        // Load existing messages
+        async function loadMessages() {
+            const from = '<%= currentUserUsername %>';
+            const to = '<%= otherUserUsername %>';
+
+            const response = await fetch(`/messages?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+            const messages = await response.json();
+
+            const messagesDiv = document.getElementById('messages');
+            messages.forEach(message => {
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `${message.from_username}: ${message.text}`; // Make sure to display who the message is from
+                messagesDiv.appendChild(messageElement);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMessages();
+        });
+    </script>
+</body>
+</html>

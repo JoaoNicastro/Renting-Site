@@ -32,11 +32,33 @@
                     <h2 class="name"><%= match.match %></h2>
                     <p class="price">€1000 EUR/month</p>
                 </div>
-                <p class="score">Score: <%= match.score %></p>
-                <p><%= match.bio %></p>
-                <button class="message-btn">Message</button>
+                <p class="descriptions">Hey everyone! I'm Alex from Italy, heading to Rotterdam for a Business Administration Bachelor. I'm into exploring, going out, and kicking back with friends. Looking for a place close within the city and easy access to Erasmus university...</p>
+                <button class="message-btn" data-user-id="<%= match.match %>">Message</button>
             </div>
         <% }); %>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socket = io();
+    
+            // Listen for updates
+            socket.on('updateScores', function(data) {
+                if (data.user === "<%= user.username %>") {
+                    // Fetch and update their matches
+                    location.reload(); // Simple way to refresh the data
+                }
+            });
+    
+            // Attach click event listeners to message buttons
+            document.querySelectorAll('.message-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetUsername = this.getAttribute('data-user-id');
+                    // Redirect to the chat page, passing the target username as a query parameter
+                    window.location.href = `/message?with=${encodeURIComponent(targetUsername)}`;
+                });
+            });
+        });
+    </script>
 </body>
 </html>

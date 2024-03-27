@@ -11,6 +11,10 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 const server = http.createServer(app); // Wrap the Express app
+
+const WebSocket = require('ws')
+const wss = new WebSocket.Server({ server });
+
 const io = new Server(server); // Attach socket.io to the server
 
 app.use(express.static('views'));
@@ -82,6 +86,13 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
+wss.on('connection', socket => {
+  socket.on('message', message => {
+    console.log(message)
+    socket.send(`${message}`)
+  })
+})
 
 app.get('/', (req, res) => {
     res.redirect('/discover');
@@ -459,6 +470,11 @@ app.get('/profile', async (req, res) => {
     console.error('Error fetching profile:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+app.get('/test', (req, res) => {
+  // Render 'test.ejs' when this route is accessed, without passing any data
+  res.render('pages/test');
 });
 
 

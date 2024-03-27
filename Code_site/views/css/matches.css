@@ -23,7 +23,7 @@ h1 {
     margin-bottom: 2rem;
     overflow: hidden; /* This will ensure that the image doesn't overflow the border radius */
     width: 100%; /* Adjust width as needed */
-    max-width: 90%;
+    max-width: 80%;
 }
 
 .profile-pic {
@@ -39,6 +39,9 @@ h1 {
     grid-template-columns: 1fr auto; /* Change to use 1fr and auto */
     grid-gap: 10px; /* Optional: adds some space between the columns */
     align-items: center;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
 }
 
 .name {
@@ -47,7 +50,7 @@ h1 {
     font-size: 1.5em;
     color: #333;
     margin: 0;
-    font-size: clamp(1.5rem, 2vw, 2.5rem);
+    font-size: clamp(1.7rem, 2vw, 2.5rem);
 }
 
 .score {
@@ -74,7 +77,7 @@ h1 {
     color: #595959;
     grid-column: 1 / -1; /* Make the location span the entire width for better control */
     grid-row: 1;
-    font-size: clamp(0.5rem, 2vw, 0.7rem);
+    font-size: clamp(1rem, 1vw, 2rem);
     margin: 0;
 }
 
@@ -86,4 +89,10 @@ h1 {
     font-weight: bold;
     margin: 0;
     font-size: clamp(1.5rem, 2vw, 2.5rem);
+}
+
+.descriptions {
+    font-size: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
