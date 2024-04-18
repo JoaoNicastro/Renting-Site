@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL CHECK (char_length(first_name) >= 3),
     last_name VARCHAR(50) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE users (
 -- SELECT * FROM compatibility_scores;
 
 
-CREATE TABLE compatibility_scores (
+CREATE TABLE IF NOT EXISTS compatibility_scores (
     id SERIAL PRIMARY KEY,
     user_id_a VARCHAR(50) REFERENCES users(username),
     user_id_b VARCHAR(50) REFERENCES users(username),
@@ -51,10 +51,21 @@ CREATE TABLE compatibility_scores (
     CONSTRAINT unique_user_pair UNIQUE (user_id_a, user_id_b)
 );
 
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
   id SERIAL PRIMARY KEY,
   from_username VARCHAR(255) NOT NULL,
   to_username VARCHAR(255) NOT NULL,
   text TEXT NOT NULL,
+  time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS chat_sessions (
+  session_id SERIAL PRIMARY KEY,
+  user_id VARCHAR(255) NOT NULL,
+  partner_id VARCHAR(255) NOT NULL,
+  last_read_message_id INT,
+  FOREIGN KEY (user_id) REFERENCES users (username) ON DELETE CASCADE,
+  FOREIGN KEY (partner_id) REFERENCES users (username) ON DELETE CASCADE,
+  FOREIGN KEY (last_read_message_id) REFERENCES messages (id) ON DELETE SET NULL
 );

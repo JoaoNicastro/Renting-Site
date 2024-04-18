@@ -3,16 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Websockets</title>
     <link href="../css/message.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var username = "<%= user.username %>"; // Ensure this is properly escaped to prevent XSS
+        var chatWithUserId = "<%= chatWithUserId %>";
+    </script>
     <script defer src = "../js/app.js"></script>
 </head>
 <body>
-    <form>
-        <input type="text" placeholder="Your message">
-        <button>Send</button>
-    </form>
-    <ul></ul>
-    
+    <div id="chat-header">
+        <button id="back-button" class="back-button">
+            <span class="material-symbols-outlined">Arrow_Back_iOS_New</span>
+        </button>
+        <h2 id="user-name">User's Name</h2>
+      </div>
+    <div id="messages-container">
+        <ul></ul>
+    </div>
+    <div id="message-form">
+        <form>
+            <input type="text" id="message-input">
+            <button type="submit" aria-label="Send message" class="icon-button">
+                <span class="material-symbols-outlined">send</span>
+            </button>
+        </form>
+    </div>
+    <p class="activity"></p>
+    <script>
+        // Assuming this script is placed before the closing </body> tag or within a DOMContentLoaded listener
+        document.addEventListener("DOMContentLoaded", function() {
+            var chatWithUserId = "<%= chatWithUserId %>"; // Ensure this is properly escaped to prevent XSS
+            document.getElementById("user-name").textContent = chatWithUserId;
+
+            document.getElementById("back-button").addEventListener("click", function() {
+            window.history.back();
+            });
+        });
+    </script>
 </body>
 </html>

@@ -12,9 +12,6 @@ const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 const server = http.createServer(app); // Wrap the Express app
 
-const WebSocket = require('ws')
-const wss = new WebSocket.Server({ server });
-
 const io = new Server(server); // Attach socket.io to the server
 
 app.use(express.static('views'));
@@ -75,24 +72,62 @@ app.get('/chat', (req, res) => {
   res.render('chat');
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+function saveMessage(fromUsername, toUsername, text) {
+  const time = new Date(); // JavaScript date object for current time
+  return db.none('INSERT INTO messages (from_username, to_username, text, time) VALUES ($1, $2, $3, $4)', [fromUsername, toUsername, text, time]);
+}
 
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg); // This should broadcast to all users
+function fetchMessages(fromUsername, toUsername) {
+  return db.any('SELECT from_username, to_username, text, time FROM messages WHERE (from_username = $1 AND to_username = $2) OR (from_username = $2 AND to_username = $1) ORDER BY time ASC', [fromUsername, toUsername]);
+}
+
+io.on('connection', socket => {
+  socket.on('joinChat', data => {
+    const roomId = generateRoomId(data.userId, data.chatWithUserId);
+    socket.join(roomId);
+
+    fetchMessages(data.userId, data.chatWithUserId)
+      .then(messages => {
+          messages.forEach(message => {
+              message.time = new Date(message.time).toISOString(); // Convert date to ISO string format if not already
+          });
+          socket.emit('loadMessages', messages);
+      })
+      .catch(error => {
+          console.error('Error fetching messages:', error);
+      });
   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+  socket.on('message', async data => {
+    try {
+      await saveMessage(data.username, data.chatWithUserId, data.text);
+      console.log('Message saved successfully.');
 
-wss.on('connection', socket => {
-  socket.on('message', message => {
-    console.log(message)
-    socket.send(`${message}`)
+      const messageWithTimestamp = {
+        ...data,
+        time: new Date().toISOString() // ISO string format
+      };
+      
+      const roomId = generateRoomId(data.username, data.chatWithUserId);
+      io.to(roomId).emit('message', messageWithTimestamp);
+
+    } catch(error) {
+      console.error('Failed to send message or update chats:', error);
+      socket.emit('error', 'Failed to send message.');
+    }
+  });
+  socket.on('activity', data => {
+    const roomId = generateRoomId(data.username, data.chatWithUserId);
+    console.log(roomId)
+    socket.broadcast.to(roomId).emit('activity', data.username)
   })
 })
+
+function generateRoomId(userId1, userId2) {
+  // Ensure IDs are in a consistent order
+  return [userId1, userId2].sort().join('_');
+}
+
 
 app.get('/', (req, res) => {
     res.redirect('/discover');
@@ -314,26 +349,81 @@ async function updateCompatibilityScore(user_id_a, user_id_b, newScore) {
     }
 }
 
-app.get('/matches', async (req, res) => {
-  // Check if the user is logged in and has a username
-  if (!req.session.user || !req.session.user.username) {
-      return res.redirect('/login'); // Redirect to login if not
-  }
-
-  const username = req.session.user.username; // Use the logged-in user's username
+async function fetchChatPartners(username) {
+  const query = `
+      SELECT chat_partner, MAX(created_at) as last_message_time
+      FROM (
+          SELECT 
+              CASE
+                  WHEN from_username = $1 THEN to_username
+                  ELSE from_username
+              END as chat_partner,
+              created_at
+          FROM messages
+          WHERE from_username = $1 OR to_username = $1
+      ) as subquery
+      GROUP BY chat_partner
+      ORDER BY MAX(created_at) DESC;
+  `;
+  const values = [username];
 
   try {
-      const query = `
-          SELECT user_id_b as match, score
-          FROM compatibility_scores
-          WHERE user_id_a = $1
-          ORDER BY score DESC
-          LIMIT 10; 
-      `;
-      const matches = await db.any(query, [username]);
-      res.render('pages/matches', { user: req.session.user, matches });
+    const res = await db.query(query, values);
+    console.log("Fetch Chat Partners - DB Response:", res);
+    if (Array.isArray(res)) { // Check if res is directly an array
+      return res.map(row => ({ username: row.chat_partner }));
+    } else {
+      console.log("Response is not array, something went wrong", res);
+      return []; // Return empty if the expected data isn't an array
+    }
   } catch (err) {
-      console.error('Error fetching matches:', err);
+      console.error('Error fetching chat partners:', err);
+      throw err;
+  }
+}
+
+async function fetchNonChatPartners(username) {
+  const query = `
+      SELECT username FROM users WHERE username <> $1
+      AND username NOT IN (
+          SELECT DISTINCT 
+            CASE
+              WHEN from_username = $1 THEN to_username
+              ELSE from_username
+            END
+          FROM messages
+          WHERE from_username = $1 OR to_username = $1
+      );
+  `;
+  const values = [username];
+
+  try {
+    const res = await db.query(query, values);
+    console.log("Fetch Non-Chat Partners - DB Response:", res);
+    if (Array.isArray(res)) {
+      return res.map(row => ({ match: row.username }));
+    } else {
+      console.log("Response is not array for non-chat partners, something went wrong", res);
+      return []; // Safely handle no data situation
+    }
+  } catch (err) {
+      console.error('Error fetching non-chat partners:', err);
+      throw err;
+  }
+}
+
+app.get('/matches', async (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+      return res.redirect('/login');
+  }
+
+  const username = req.session.user.username;
+  try {
+      const discoverData = await fetchNonChatPartners(username);
+      const chatData = await fetchChatPartners(username);
+      res.render('pages/matches', { user: req.session.user, matches: discoverData, chats: chatData });
+  } catch (err) {
+      console.error('Error fetching data for matches page:', err);
       res.status(500).send('Internal server error');
   }
 });
@@ -473,8 +563,25 @@ app.get('/profile', async (req, res) => {
 });
 
 app.get('/test', (req, res) => {
-  // Render 'test.ejs' when this route is accessed, without passing any data
-  res.render('pages/test');
+  if (!req.session.user) {
+    // If user is not logged in, redirect to login page
+    return res.redirect('/login');
+  }
+
+  const chatWithUserId = req.query.chatWithUserId;
+  console.log(chatWithUserId);
+  console.log(chatWithUserId);
+
+  try {
+    // Render the profile page with user information
+    res.render('pages/test', {
+      user: req.session.user,
+      chatWithUserId: chatWithUserId
+    });
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 

@@ -1,28 +1,153 @@
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-size: 1.5rem;
 }
 
+#messages-container::-webkit-scrollbar-track {
+    background: #2c2c2c; /* Dark grey */
+}
+
+/* Styles the scrollbar thumb (the part that you drag) */
+#messages-container::-webkit-scrollbar-thumb {
+    background: #555; /* Lighter grey */
+    border-radius: 1rem;
+}
+
+/* Optional: Styles the scrollbar itself (width, etc.) */
+#messages-container::-webkit-scrollbar {
+    width: 0.3rem;
+}
+
 body {
-    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #EEEEEE;
     color: #fff;
+}
+
+.time {
+    font-size: 0.5rem;
+    color: #d1d1d1; /* Light grey for timestamp */
+    justify-content: flex-end; /* Align timestamps to the right of the message bubble */
+}
+
+#chat-header {
+    position: sticky;
+    display: flex;
+    top: 0;
+    background-color: #2c2c2c; /* Match the color theme of your chat app */
+    color: #EEEEEE;
+    padding: 0.7rem;
+    z-index: 1000; /* Ensure the header stays above other content */
+}
+
+#messages-container {
+    flex: 1;
+    overflow-y: auto; /* Makes the messages list scrollable */
     padding: 1rem;
+}
+
+.back-button {
+    color: #9747FF;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40rem; /* Consistent icon size with other buttons */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition: background-color 0.2s, box-shadow 0.2s; /* Quicker transition for a snappier feel */
+}
+ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+}
+
+#message-form {
+    padding: 1rem;
+    background: #2c2c2c; /* Slightly darker background for the form */
 }
 
 form {
     display: flex;
     justify-content: center;
-    gap: 4px;
+    gap: 0.1rem;
 }
 
-ul {
+input, button {
+    border-radius: 10rem;
+    padding: 0.25rem;
+}
+
+.message {
+    padding: 0.5rem;
+    margin-bottom: 0.2rem;
+    border-radius: 20px;
+    max-width: 70%; /* Limits the message width */
+    overflow-wrap: anywhere;
+    width: fit-content; /* Adjust width to fit content with a max limit */
+}
+
+.sent {
+    display: block; /* Ensures block-level element behavior, allowing for max-width */
+    width: fit-content; /* Width based on content, respecting max-width */
+    align-self: flex-end;
+    background-color: #4F3CC9;
+    font-size: clamp(1rem, 2vw, 5rem);
+}
+
+.received {
+    display: block; /* Ensures block-level element behavior, allowing for max-width */
+    width: fit-content; /* Width based on content, respecting max-width */
+    align-self: flex-start;
+    background-color: #888888;
+    font-size: clamp(1rem, 2vw, 5rem);
+}
+
+#message-input {
+    width: 100%; /* Full-width to maximize input space */
+    padding: 0.25rem; /* Padding for aesthetics */
+    box-sizing: border-box; /* Includes padding in the width */
+    border: 2px solid #ffffff; /* Example border */
+    border-radius: 4rem; /* Rounded borders */
+    overflow-x: auto; /* Allows horizontal scrolling */
+}
+
+#message-input:focus {
+    outline: none;
+    border-color: #ffffff;
+    background-color: #ffffff;
+}
+
+#message-input, #message-form button {
+    font-size: clamp(1rem, 2vw, 5rem);
+}
+
+.icon-button {
+    background: #9747FF;
+    border: none;
+    color: white; /* Icon color: blue */
+    cursor: pointer;
     display: flex;
-    flex-flow: column;
-    justify-content: left;
-    list-style-type: none;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; /* Larger area for easier clicking */
+    border-radius: 50%; /* Circular button */
+    transition: transform 0.1s, box-shadow 0.1s; /* Smooth transition for transform and box-shadow */
+    user-select: none; /* Prevents text selection */
+    -webkit-user-select: none; /* Specific for WebKit browsers */
+    -webkit-tap-highlight-color: transparent; /* Removes tap highlight color in WebKit browsers */
 }
 
-input,
-button {
-    border-radius: 10px;
-    padding: 10px;
+.icon-button:hover, .icon-button:focus {
+    box-shadow: 0 0 0 2px #ffffff; /* White shadow mimics an outline */
+    background-color: #9747FF; /* Maintain the same background color */
+    transform: scale(1.05); /* Slightly enlarge button on hover/focus */
 }

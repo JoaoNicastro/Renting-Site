@@ -5,59 +5,122 @@
     <title>Your Matches</title>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const socket = io();
-
-            socket.on('updateScores', function(data) {
-                if (data.user === "<%= user.username %>") {
-                    // Fetch and update their matches
-                    location.reload(); // Simple way to refresh the data
-                }
-            });
-        });
+        window.onload = function() {
+            if (!sessionStorage.getItem("reloaded")) {
+                sessionStorage.setItem("reloaded", "true"); // Set the reloaded flag
+                window.location.reload(); // Reload the page
+            } else {
+                sessionStorage.removeItem("reloaded"); // Remove the flag after reloading
+            }
+        }
     </script>
 </head>
 <body>
     <link rel="stylesheet" href="../css/matches.css">
     <header class="header">
         <img src="../img/Logo.png" alt="Unistays Logo" class="unistays-logo">
+        <div class="navigation">
+            <button id="discover-btn">Discover</button>
+            <button id="chats-btn">Chats</button>
+        </div>
     </header>
-    <h1>Your Top Matches</h1>
-    <div id="matches">
-        <% matches.forEach(match => { %>
-            <div class="roommate-card">
-                <img src="../img/profile-pic.jpg" alt="<%= match.match %> Profile" class="profile-pic">
-                <div class="roommate-info">
-                    <p class="location">Roomate - Amsterdam</p>
-                    <h2 class="name"><%= match.match %></h2>
-                    <p class="price">€1000 EUR/month</p>
-                </div>
-                <p class="descriptions">Hey everyone! I'm Alex from Italy, heading to Rotterdam for a Business Administration Bachelor. I'm into exploring, going out, and kicking back with friends. Looking for a place close within the city and easy access to Erasmus university...</p>
-                <button class="message-btn" data-user-id="<%= match.match %>">Message</button>
-            </div>
-        <% }); %>
+    <div id="discover" style="display: block;">
+        <h1>Your Top Matches</h1>
+        <div id="matches">
+            <% if (matches.length > 0) { %>
+                <% matches.forEach(match => { %>
+                    <div class="roommate-card">
+                        <img src="../img/profile-pic.jpg" alt="<%= match.match %> Profile" class="profile-pic">
+                        <div class="roommate-info">
+                            <p class="location">Roomate - Amsterdam</p>
+                            <h2 class="name"><%= match.match %></h2>
+                            <p class="price">€1000 EUR/month</p>
+                        </div>
+                        <p class="descriptions">Hey everyone! I'm Alex from Italy, heading to Rotterdam for a Business Administration Bachelor. I'm into exploring, going out, and kicking back with friends. Looking for a place close within the city and easy access to Erasmus university...</p>
+                        <button class="message-btn" data-user-id="<%= match.match %>">Message</button>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No one new yet.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div id="chats" style="display: none;">
+        <h1>Your Chats</h1>
+        <div id="chat-list">
+            <% if (chats.length > 0) { %>
+                <% chats.forEach(function(chat) { %>
+                    <div class="chat-card">
+                        <h2><%= chat.username %></h2>
+                        <button class="message-btn" data-user-id="<%= chat.username %>">Open Chat</button>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No chats yet.</p>
+            <% } %>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const socket = io();
-    
-            // Listen for updates
-            socket.on('updateScores', function(data) {
-                if (data.user === "<%= user.username %>") {
-                    // Fetch and update their matches
-                    location.reload(); // Simple way to refresh the data
-                }
-            });
-    
             // Attach click event listeners to message buttons
             document.querySelectorAll('.message-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const targetUsername = this.getAttribute('data-user-id');
                     // Redirect to the chat page, passing the target username as a query parameter
-                    window.location.href = `/message?with=${encodeURIComponent(targetUsername)}`;
+                    window.location.href = `/test?chatWithUserId=${encodeURIComponent(targetUsername)}`;
                 });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const discoverBtn = document.getElementById('discover-btn');
+            const chatsBtn = document.getElementById('chats-btn');
+            const discoverSection = document.getElementById('discover');
+            const chatsSection = document.getElementById('chats');
+
+            discoverBtn.addEventListener('click', function() {
+                switchTab('discover');
+            });
+
+            chatsBtn.addEventListener('click', function() {
+                switchTab('chats');
+            });
+
+            function switchTab(tab) {
+                if (tab === 'discover') {
+                    history.pushState({tab: 'discover'}, '', '/matches#discover');
+                    discoverSection.style.display = 'block';
+                    chatsSection.style.display = 'none';
+                    discoverBtn.classList.add('active');
+                    chatsBtn.classList.remove('active');
+                } else if (tab === 'chats') {
+                    history.pushState({tab: 'chats'}, '', '/matches#chats');
+                    discoverSection.style.display = 'none';
+                    chatsSection.style.display = 'block';
+                    discoverBtn.classList.remove('active');
+                    chatsBtn.classList.add('active');
+                }
+            }
+
+            // Handle browser back and forward events
+            window.onpopstate = function(event) {
+                if (event.state && event.state.tab === 'discover') {
+                    switchTab('discover');
+                } else if (event.state && event.state.tab === 'chats') {
+                    switchTab('chats');
+                } else {
+                    switchTab('discover');  // Default to discover if state is not set
+                }
+            };
+
+            // Initialize based on current hash
+            if (window.location.hash === '#chats') {
+                switchTab('chats');
+            } else {
+                switchTab('discover');
+            }
         });
     </script>
 </body>

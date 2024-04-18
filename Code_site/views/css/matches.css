@@ -96,3 +96,21 @@ h1 {
     margin-left: 1rem;
     margin-right: 1rem;
 }
+
+#discover-btn, #chats-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+#discover-btn.active, #chats-btn.active {
+    background-color: #555; /* Darker when active */
+}
+
+.unread {
+    background-color: #fdd; /* light red background for unread messages */
+    border-left: 5px solid red; /* prominent left border indicating new activity */
+}
