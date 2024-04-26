@@ -481,24 +481,28 @@ body {
 .image-slider .slider-img {
     max-height: 17rem;
     max-width: 20rem;
-    width: 30vw;
-    position: relative;
-    transition: transform 5s ease-in-out;
+    width: 32vw;
+    position: absolute;
+    transition: transform 0.5s ease-in-out;
     background-size: cover;
     background-position: center;
 }
 
 .left-image {
-    transform: scale(0.9);
+    transform: scale(0.8); /* Smaller scale */
+    opacity: 0.8; /* Slightly more visible than other side images */
 }
 
 .center-image {
     transform: translateX(0);
-    z-index: 1; /* Make sure the center image is on top */
+    z-index: 10; /* Make sure the center image is on top */
+    opacity: 1; /* Fully visible for center image */
+    transform: scale(1); /* No scaling applied to the center image */
 }
 
 .right-image {
-    transform: scale(0.9);
+    transform: scale(0.8); /* Smaller scale */
+    opacity: 0.8; /* Slightly more visible than other side images*/
 }
 
 .slider-image img {

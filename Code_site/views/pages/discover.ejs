@@ -165,9 +165,6 @@
                     <div class="testimonial-container">
                         <div class="testimonial">
                             <div class="image-slider">
-                                <img src="../img/Shot-iphone1.png" alt="Image 1" class="slider-img left-image">
-                                <img src="../img/Shot-iphone1.png" alt="Image 2" class="slider-img center-image">
-                                <img src="../img/Shot-iphone1.png" alt="Image 3" class="slider-img right-image">
                             </div>
                             <div class="testimonial-text">
                                 <h3>Helena</h3>
@@ -189,31 +186,72 @@
             "../img/Shot-iphone1.png",
             "../img/Shot-iphone1.png",
             "../img/Shot-iphone1.png",
-            "../img/Shot-iphone1.png",
-            // Add more as needed
+            "../img/Should.png",
+            // Add more images as needed
         ];
-        let current = 0; // Current index of the center image
-    
-        const leftImageDiv = document.querySelector('.left-image');
-        const centerImageDiv = document.querySelector('.center-image');
-        const rightImageDiv = document.querySelector('.right-image');
-    
-        function updateImageDivs() {
-            // Update image divs with new images based on current index
-            leftImageDiv.src = imagePaths[(current + imagePaths.length - 1) % imagePaths.length];
-            centerImageDiv.src = imagePaths[current];
-            rightImageDiv.src = imagePaths[(current + 1) % imagePaths.length];
+        let current = 1; // Start at 1 to make the first image appear centered initially
+
+        const sliderContainer = document.querySelector('.image-slider');
+        const images = imagePaths.map(src => {
+            const img = document.createElement('img');
+            img.className = 'slider-img';
+            img.src = src;
+            sliderContainer.appendChild(img);
+            return img;
+        });
+
+        function updateStyles() {
+            images.forEach((img, index) => {
+                let position = (index - current) * 100; // Calculate position for each image
+                img.style.transform = `translateX(${position}%)`; // Apply the movement
+
+                img.style.zIndex = index === current ? 10 : 5; // Ensure center image is always on top
+            
+                // Adjust the size of left and right images
+                if (index !== current) {
+                    img.style.transform += ' scale(0.9)'; // Adjust the width as needed
+                } else {
+                    img.style.transform += ' scale(1)'; // Set the width back to 100% for the center image
+                }
+            });
+
+            images.forEach(img => img.className = 'slider-img');
+
+            // Apply specific classes to the left and right images based on current index
+            const leftIndex = (current - 1 + imagePaths.length) % imagePaths.length;
+            const rightIndex = (current + 1) % imagePaths.length;
+
+            images.forEach(img => { img.classList.remove('left-image', 'center-image', 'right-image'); });
+            images[leftIndex].classList.add('left-image');
+            images[current].classList.add('center-image');
+            images[rightIndex].classList.add('right-image');
         }
-    
+
         function slideImages() {
-            // Slide images by updating the current index
             current = (current + 1) % imagePaths.length;
-            updateImageDivs();
+            if (current === imagePaths.length) {
+                // If current index reaches the end, reset it to 1
+                current = 1;
+                // Update the styles to make the transition to the first image seamless
+                updateStyles();
+                // Reset the transition animation to prevent it from transitioning to the first image
+                setTimeout(() => {
+                    sliderContainer.style.transition = 'none';
+                    current = 1;
+                    updateStyles();
+                    setTimeout(() => {
+                        sliderContainer.style.transition = 'transform 0.5s ease-in-out';
+                    });
+                }, 500);
+            } else {
+                // Update styles normally
+                updateStyles();
+            }
         }
-    
-        // Initial setup
-        updateImageDivs();
-    
+
+        // Set initial styles
+        updateStyles();
+
         // Start the automatic sliding every 5 seconds
         setInterval(slideImages, 5000);
     });
