@@ -64,6 +64,29 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const socket = io();
+
+            socket.on('connect', () => {
+                socket.emit('joinUserRoom', { username: '<%= user.username %>' });
+            });
+
+            socket.emit('requestLatestChats', { username: '<%= user.username %>' });
+
+            socket.on('updateChats', function(chats) {
+                const chatList = document.getElementById('chat-list');
+                chatList.innerHTML = '';  // Clear the current list
+
+                chats.forEach(chat => {
+                    const chatEntry = document.createElement('div');
+                    chatEntry.className = `chat-card ${chat.unreadCount > 0 ? 'unread' : ''}`;
+                    chatEntry.innerHTML = `
+                        <h2>${chat.username} ${chat.unreadCount > 0 ? `(${chat.unreadCount} New Messages)` : ''}</h2>
+                        <button onclick="window.location.href='/test?chatWithUserId=${chat.username}&lastReadId=${chat.lastReadMessageId}'" class="message-btn">Open Chat</button>
+                    `;
+                    chatList.appendChild(chatEntry);
+                });
+            });
+
             // Attach click event listeners to message buttons
             document.querySelectorAll('.message-btn').forEach(button => {
                 button.addEventListener('click', function() {

@@ -82,12 +82,18 @@ function fetchMessages(fromUsername, toUsername) {
 }
 
 io.on('connection', socket => {
+  socket.on('joinUserRoom', (data) => {
+    socket.join(`user_${data.username}`);  // Joins a room named 'user_USERNAME'
+  });
+
   socket.on('joinChat', data => {
     const roomId = generateRoomId(data.userId, data.chatWithUserId);
     socket.join(roomId);
 
     fetchMessages(data.userId, data.chatWithUserId)
       .then(messages => {
+          const lastMessageId = messages[messages.length - 1]?.id || null;
+          updateChatSession(data.userId, data.chatWithUserId, lastMessageId);
           messages.forEach(message => {
               message.time = new Date(message.time).toISOString(); // Convert date to ISO string format if not already
           });
@@ -96,6 +102,29 @@ io.on('connection', socket => {
       .catch(error => {
           console.error('Error fetching messages:', error);
       });
+  });
+
+  socket.on('readMessages', async data => {
+    const lastMessageId = await fetchLastMessageId(data.username, data.chatWithUserId);
+    
+    console.log('Updating chat session with:', data.username, data.chatWithUserId, lastMessageId);
+    await updateChatSession(data.username, data.chatWithUserId, lastMessageId);
+    // Optionally, emit an event back to the user to confirm messages are marked as read
+    socket.emit('messagesRead');
+
+    const chatData = await fetchChatPartners(data.username);
+    console.log("data", chatData);
+    io.to(`user_${data.username}`).emit('updateChats', chatData);
+  });
+
+  socket.on('requestLatestChats', async (data) => {
+    try {
+        const chatData = await fetchChatPartners(data.username);
+        console.log("data", chatData);
+        socket.emit('updateChats', chatData);  // Send the latest chat data back to the requesting client
+    } catch (error) {
+        console.error('Failed to fetch and send chat data:', error);
+    }
   });
 
   socket.on('message', async data => {
@@ -111,6 +140,11 @@ io.on('connection', socket => {
       const roomId = generateRoomId(data.username, data.chatWithUserId);
       io.to(roomId).emit('message', messageWithTimestamp);
 
+      const senderChatData = await fetchChatPartners(data.username);
+      const receiverChatData = await fetchChatPartners(data.chatWithUserId);
+
+      io.to(`user_${data.username}`).emit('updateChats', senderChatData);
+      io.to(`user_${data.chatWithUserId}`).emit('updateChats', receiverChatData);
     } catch(error) {
       console.error('Failed to send message or update chats:', error);
       socket.emit('error', 'Failed to send message.');
@@ -126,6 +160,46 @@ io.on('connection', socket => {
 function generateRoomId(userId1, userId2) {
   // Ensure IDs are in a consistent order
   return [userId1, userId2].sort().join('_');
+}
+
+async function updateChatSession(userId, partnerId, lastReadMessageId) {
+  const upsertQuery = `
+    INSERT INTO chat_sessions (user_id, partner_id, last_read_message_id)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (user_id, partner_id)
+    DO UPDATE SET last_read_message_id = EXCLUDED.last_read_message_id
+    RETURNING *;
+  `;
+  try {
+    const res = await db.query(upsertQuery, [userId, partnerId, lastReadMessageId]);
+    console.log('Chat session updated successfully', res);
+  } catch (err) {
+    console.error('Failed to update chat session:', err);
+    throw err;  // Consider re-throwing to handle errors gracefully
+  }
+}
+
+async function fetchLastMessageId(username, partnerUsername) {
+  const query = `
+    SELECT MAX(id) AS last_msg_id
+    FROM messages
+    WHERE (from_username = $1 AND to_username = $2) OR (from_username = $2 AND to_username = $1);
+  `;
+  const values = [username, partnerUsername];
+
+  try {
+    const res = await db.query(query, values);
+    console.log("Fetch Last Message ID - DB Response:", res);
+    if (Array.isArray(res) && res.length > 0) {
+      return res[0].last_msg_id;  // using Array check as per your setup
+    } else {
+      console.log("No messages found or there was an error", res);
+      return null; // appropriate default value such as null
+    }
+  } catch (err) {
+    console.error('Error fetching last message ID:', err);
+    throw err;  // Rethrow or handle as needed
+  }
 }
 
 
@@ -351,27 +425,28 @@ async function updateCompatibilityScore(user_id_a, user_id_b, newScore) {
 
 async function fetchChatPartners(username) {
   const query = `
-      SELECT chat_partner, MAX(created_at) as last_message_time
-      FROM (
-          SELECT 
-              CASE
-                  WHEN from_username = $1 THEN to_username
-                  ELSE from_username
-              END as chat_partner,
-              created_at
-          FROM messages
-          WHERE from_username = $1 OR to_username = $1
-      ) as subquery
-      GROUP BY chat_partner
-      ORDER BY MAX(created_at) DESC;
-  `;
+        SELECT 
+            u.username AS chat_partner,
+            COALESCE(cs.last_read_message_id, 0) AS last_read_message_id,
+            COUNT(m.id) FILTER (WHERE m.id > COALESCE(cs.last_read_message_id, 0) AND m.to_username = $1) AS unread_count
+        FROM users u
+        LEFT JOIN messages m ON m.from_username = u.username OR m.to_username = u.username
+        LEFT JOIN chat_sessions cs ON cs.user_id = $1 AND (cs.partner_id = u.username)
+        WHERE u.username <> $1
+        GROUP BY u.username, cs.last_read_message_id
+        ORDER BY MAX(m.id) DESC;
+    `;
   const values = [username];
 
   try {
     const res = await db.query(query, values);
     console.log("Fetch Chat Partners - DB Response:", res);
     if (Array.isArray(res)) { // Check if res is directly an array
-      return res.map(row => ({ username: row.chat_partner }));
+      return res.map(row => ({ 
+        username: row.chat_partner,
+        unreadCount: parseInt(row.unread_count),
+        lastReadMessageId: row.last_read_message_id
+      }));
     } else {
       console.log("Response is not array, something went wrong", res);
       return []; // Return empty if the expected data isn't an array

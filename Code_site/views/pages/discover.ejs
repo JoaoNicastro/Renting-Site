@@ -129,6 +129,94 @@
     <div class="text-center mt-4">
         <a href="#" class="btn btn-primary" style="background-color: #000000; color: #ffffff;">Start Now</a>
     </div>
+
+    <section class="testimonial-pricing-section">
+        <div class="content-limiter">
+            <div class="made-by-students-section">
+                <div class="stats-testimonial-container">
+                    <div class="stats-container">
+                        <h2 class="stats-header">Made by Students<br>For Students</h2>
+                        <div class="stat-row top">
+                            <div class="stat left-box">
+                                <img src="../img/Icon.png" class="stat-icon">
+                                <strong>135+ Users</strong>
+                                <span>and counting!</span>
+                            </div>
+                            <div class="stat right-box">
+                                <img src="../img/Icon.png" class="stat-icon">
+                                <strong>27,870</strong>
+                                <span>Properties notified this month</span>
+                            </div>
+                        </div>
+                        <div class="stat-row bottom">
+                            <div class="stat left-box">
+                                <img src="../img/Icon.png" class="stat-icon">
+                                <strong>55+ Roomates</strong>
+                                <span>and students matched</span>
+                            </div>
+                            <div class="stat right-box">
+                                <img src="../img/Icon.png" class="stat-icon">
+                                <strong>Connect</strong>
+                                <span>Match, and Start Searching Today!</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="testimonial-container">
+                        <div class="testimonial">
+                            <div class="image-slider">
+                                <img src="../img/Shot-iphone1.png" alt="Image 1" class="slider-img left-image">
+                                <img src="../img/Shot-iphone1.png" alt="Image 2" class="slider-img center-image">
+                                <img src="../img/Shot-iphone1.png" alt="Image 3" class="slider-img right-image">
+                            </div>
+                            <div class="testimonial-text">
+                                <h3>Helena</h3>
+                                <div class="stars">★★★★★</div>
+                                <p>"I found the perfect apartment within my budget in the area I was searching for. I was notified as soon as it was listed, getting me a viewing. I can't believe I found my apartment this fast. Thanks for the service!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <%- include('../partials/footer.ejs') %> <!-- Include the footer content -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imagePaths = [
+            "../img/Shot-iphone1.png",
+            "../img/Shot-iphone1.png",
+            "../img/Shot-iphone1.png",
+            "../img/Shot-iphone1.png",
+            "../img/Shot-iphone1.png",
+            "../img/Shot-iphone1.png",
+            // Add more as needed
+        ];
+        let current = 0; // Current index of the center image
+    
+        const leftImageDiv = document.querySelector('.left-image');
+        const centerImageDiv = document.querySelector('.center-image');
+        const rightImageDiv = document.querySelector('.right-image');
+    
+        function updateImageDivs() {
+            // Update image divs with new images based on current index
+            leftImageDiv.src = imagePaths[(current + imagePaths.length - 1) % imagePaths.length];
+            centerImageDiv.src = imagePaths[current];
+            rightImageDiv.src = imagePaths[(current + 1) % imagePaths.length];
+        }
+    
+        function slideImages() {
+            // Slide images by updating the current index
+            current = (current + 1) % imagePaths.length;
+            updateImageDivs();
+        }
+    
+        // Initial setup
+        updateImageDivs();
+    
+        // Start the automatic sliding every 5 seconds
+        setInterval(slideImages, 5000);
+    });
+    </script>        
 </body>
 </html>

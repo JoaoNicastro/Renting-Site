@@ -77,12 +77,23 @@ socket.on('loadMessages', (messages) => {
     });
     const messagesContainer = document.querySelector('#messages-container');
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    if(messages.length > 0) {
+        const lastMessageId = messages[messages.length - 1].id;
+        socket.emit('readMessages', {
+            username: username,
+            chatWithUserId: chatWithUserId,
+            lastReadMessageId: lastMessageId
+        });
+    }
 });
 
 function displayMessage(message) {
     const messagesContainer = document.querySelector('#messages-container ul'); // Ensure you select the <ul> within #messages-container
     const messageElement = document.createElement('li');
     messageElement.classList.add('message'); // Apply common message styling
+
+    messageElement.setAttribute('data-message-id', message.id);  // Ensure each message has an ID attribute
 
     const timeString = new Date(message.time).toLocaleTimeString([], {
         hour: '2-digit',

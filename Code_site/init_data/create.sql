@@ -67,5 +67,6 @@ CREATE TABLE IF NOT EXISTS chat_sessions (
   last_read_message_id INT,
   FOREIGN KEY (user_id) REFERENCES users (username) ON DELETE CASCADE,
   FOREIGN KEY (partner_id) REFERENCES users (username) ON DELETE CASCADE,
-  FOREIGN KEY (last_read_message_id) REFERENCES messages (id) ON DELETE SET NULL
+  FOREIGN KEY (last_read_message_id) REFERENCES messages (id) ON DELETE SET NULL,
+  UNIQUE (user_id, partner_id)  -- This is the new line to add
 );

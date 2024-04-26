@@ -175,7 +175,7 @@ body {
     margin-top: 3rem; /* Adds some space above the heading, adjust as needed */
     margin-bottom: 3rem;
     font-weight: bold;
-    font-size: clamp(1.5rem, 4vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
+    font-size: clamp(1.5rem, 3.5vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
     /* Add more styling here as needed */
 }
 
@@ -326,6 +326,183 @@ body {
 
 .Housing-paragraph {
     font-size: clamp(0.75rem, 1vw, 1rem);
+}
+
+.testimonial-pricing-section {
+    color: #333;
+    padding: 2rem;
+    padding-right: 0rem;
+    margin-top: 6rem;
+  }
+  
+  /* Made by Students Section */
+.made-by-students-section h2 {
+    text-align: left;
+    font-size: clamp(1.5rem, 3.5vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
+    color: #000000;
+    font-weight: bold;
+}
+
+.stats-testimonial-container {
+    display: flex;
+    justify-content: space-between;
+}
+  
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;  /* Allows wrapping of child elements */
+    flex-direction: row; /* Arranges children horizontally */
+    gap: 0.5vw; /* Manages spacing between children */
+    align-items: flex-start;
+    justify-content: space-between; /* Distributes space between and around content items */
+    flex: 1;
+}
+
+.stat-row {
+    display: flex;
+    width: 100%; /* Ensures the row takes full width of the stats-container */
+}
+
+
+.stat {
+    flex: 1 1 20%; /* Allows boxes to grow and shrink but with a reasonable base size */
+    max-width: 25vw; /* Maximum width each box can reach */
+    min-height: 6rem; /* Minimum height for each box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    align-items: center; /* Centers content horizontally */
+    text-align: center;
+    background: #f8f9fa; /* Background color */
+    padding: 1rem; /* Internal padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 20px; /* Rounded corners */
+    border: 2px solid #4F3CC9; /* Adds a border with the specified color */
+}
+
+.stat-icon {
+    display: block;
+    margin: 0 auto; /* Centers the icon horizontally */
+    height: 2.5rem; /* Set a fixed height */
+    width: 2.5rem; /* Set a fixed width */
+}
+
+.stat-row .stat strong {
+    font-size: clamp(0.8rem, 1.5vw, 1.5rem); /* Decrease the font size of the strong tag */
+    margin-bottom: 0rem; /* Reduces the bottom margin */
+}
+
+.stat-row .stat span {
+    font-size: clamp(0.3rem, 0.7vw, 0.7rem); /* Decrease the font size of the span tag */
+}
+
+.left-box {
+    margin-left: 0rem;
+}
+  
+.right-box {
+    margin-left: 2.5vw;
+}
+
+.stat-row.bottom .stat:last-child {
+    margin-right: 0;
+  }
+
+.stat strong {
+    display: block;
+    font-size: 1.5rem;
+    color: #000000;
+    margin-bottom: 0.5rem;
+}
+
+.testimonial-text-container {
+    width: 100%; /* Take full width of its parent (the .testimonial div) */
+    max-width: 30rem; /* Match the maximum width of the image */
+    text-align: center; /* Center the text if needed */
+}
+
+.testimonial-container {
+    flex: 1;
+    display: flex;
+    height: 100%; /* Ensures it stretches to match the stats container */
+    justify-content: center; /* Centers the testimonial horizontally */
+    align-items: center; /* Centers the testimonial vertically */
+}
+
+.testimonial {
+    display: flex;
+    flex-direction: column;  /* Aligns children (image and text) in a column */
+    align-items: center;     /* Center aligns the children */
+    gap: 0.5rem;               /* Spacing between the image and the text */
+    max-width: 20rem;
+    width: 30vw;
+    margin-top: 2rem;
+    margin-left: 5.5rem;
+}
+
+.testimonial-image {
+    max-height: 17rem; /* Maximum height to maintain the square shape */
+    width: 100%;           /* Fixed size for square shape */
+    height: 27vw;          /* Fixed size for square shape */
+    border-radius: 10%;     /* Makes the image rounded */
+    object-fit: cover;      /* Ensures the image covers the area without distortion */
+}
+
+.testimonial-text h3 {
+    color: #000000;
+    font-size: clamp(0.75rem, 1.25vw, 1.5rem); /* Decrease the font size of the span tag */
+    margin-bottom: 0;
+    margin-left: 0.1rem;
+}
+
+.stars {
+    margin-top: 0;
+    color: #4F3CC9;
+    font-size: clamp(1rem, 2vw, 1.7rem); /* Decrease the font size of the span tag */
+    margin-left: 0.1rem;
+}
+
+.testimonial-text p {
+    font-size: clamp(0.3rem, 1vw, 0.8rem); /* Decrease the font size of the span tag */
+    margin-left: 0.1rem;
+}
+
+.image-slider {
+    max-height: 17rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    height: 27vw; 
+    width: 32vw;
+}
+
+.image-slider .slider-img {
+    max-height: 17rem;
+    max-width: 20rem;
+    width: 30vw;
+    position: relative;
+    transition: transform 5s ease-in-out;
+    background-size: cover;
+    background-position: center;
+}
+
+.left-image {
+    transform: scale(0.9);
+}
+
+.center-image {
+    transform: translateX(0);
+    z-index: 1; /* Make sure the center image is on top */
+}
+
+.right-image {
+    transform: scale(0.9);
+}
+
+.slider-image img {
+    display: none; /* We use background images now */
 }
 
 @media (min-width: 768px) {
@@ -660,6 +837,10 @@ body {
         margin-left: 2.5rem; /* Adjust as needed for very large screens */
     }
 
+    .testimonial-pricing-section {
+        margin-left: 2.5rem;
+    }
+
     .header-icon-text {
         background-color: #F7F5F7;
         display: flex; /* Aligns children (icon and text-container) in a row */
@@ -675,6 +856,10 @@ body {
 
     .main-container {
         margin-left: 5rem; /* Adjust as needed for very large screens */
+    }
+
+    .testimonial-pricing-section {
+        margin-left: 5rem;
     }
 
     .col-md-3:last-child {
