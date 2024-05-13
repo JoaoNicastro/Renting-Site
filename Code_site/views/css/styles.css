@@ -481,28 +481,408 @@ body {
 .image-slider .slider-img {
     max-height: 17rem;
     max-width: 20rem;
-    width: 30vw;
-    position: relative;
-    transition: transform 5s ease-in-out;
+    width: 32vw;
+    position: absolute;
+    transition: transform 0.5s ease-in-out;
     background-size: cover;
     background-position: center;
 }
 
 .left-image {
-    transform: scale(0.9);
+    transform: scale(0.8); /* Smaller scale */
+    opacity: 0.8; /* Slightly more visible than other side images */
 }
 
 .center-image {
     transform: translateX(0);
-    z-index: 1; /* Make sure the center image is on top */
+    z-index: 10; /* Make sure the center image is on top */
+    opacity: 1; /* Fully visible for center image */
+    transform: scale(1); /* No scaling applied to the center image */
 }
 
 .right-image {
-    transform: scale(0.9);
+    transform: scale(0.8); /* Smaller scale */
+    opacity: 0.8; /* Slightly more visible than other side images*/
 }
 
 .slider-image img {
     display: none; /* We use background images now */
+}
+
+.centered-heading-pricing {
+    text-align: center; /* Centers the text horizontally */
+    width: 100%; /* Ensures the heading spans the full width of its container */
+    margin-top: 3rem; /* Adds some space above the heading, adjust as needed */
+    margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: clamp(1.5rem, 3.5vw, 3rem); /* Adapts between 1.5rem and 3rem based on the viewport width */
+    /* Add more styling here as needed */
+}
+
+.pricing-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.pricing-section {
+    border: 2px solid #4F3CC9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 65vw;
+    min-width: 45rem;
+    max-width: 70rem; /* Maximum width of 45rem */
+    background-color: #fff; /* White background */
+}
+
+.pricing-options {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Added margin */
+    gap: 8.5vw;
+    margin-bottom: clamp(2rem, 6vw, 7rem);
+}
+
+.tab-content {
+    display: none;
+    margin-top: 20px;
+}
+
+.tab-content h3 {
+    margin-bottom: 10px;
+}
+
+.tab-content.active {
+    display: flex; /* Change to flex if the direct children should align in a row */
+    flex-direction: column; /* This makes the plan-container and button stack vertically */
+}
+
+.pricing-option {
+    padding: 5px 10px;
+    border-radius: 10px;
+    width: clamp(7rem, 10vw, 12rem);
+    cursor: pointer;
+    font-size: clamp(0.85rem, 1.5vw, 1.5rem);
+}
+
+.selected {
+    background-color: #000;
+    color: #fff;
+}
+
+.save-box {
+    position: relative;
+    background-color: #FF8484;
+    color: rgb(0, 0, 0);
+    padding: 5px 10px;
+    border-radius: 10px;
+    order: 2;
+    left: clamp(2rem, 5vw, 7rem);
+    font-size: clamp(0.85rem, 1.5vw, 1.5rem);
+    width: clamp(7rem, 8.5vw, 11rem);
+}
+
+.save-box2 {
+    position: relative;
+    background-color: #74eb69;
+    color: rgb(0, 0, 0);
+    padding: 5px 10px;
+    border-radius: 10px;
+    order: 2;
+    left: clamp(2rem, 5vw, 7rem);
+    font-size: clamp(0.85rem, 1.5vw, 1.5rem);
+    width: clamp(7rem, 8.5vw, 11rem);
+}
+
+.price-container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-grow: 1;
+    flex-basis: 0; 
+    order: 2; 
+    gap:1rem;
+}
+
+.price-container .price {
+    font-size: clamp(5rem, 6vw, 8rem); /* Large font size for the price */
+    font-weight: bold;
+}
+
+.price-container .per-month {
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    font-weight: bold;
+    position: relative;
+    top: -0.4rem;
+}
+
+.plan-container {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    position: relative; /* Establishes positioning context */
+    align-items: center;
+}
+
+.start-button {
+    margin-top: clamp(1rem, 1.5vw, 2.5rem);
+    margin-bottom: 1rem;
+    padding: 0.86rem;
+    border: 0px; /* Purple border */
+    width: 40%;
+    font-weight: bold;
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    border-radius: 10px;
+    background-color: #4F3CC9;
+    color: #fff;
+}
+
+.faq-container {
+    width: 100%; /* Ensures the container takes full width if not already set */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the FAQ items within the container */
+}
+
+.faq-item {
+    width: 70%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.faq-item.open {
+    border: 2px solid #4F3CC9;
+}
+
+.faq-item:focus-within, .faq-item.open {
+    border-color: #4F3CC9;
+}
+
+.faq-question:focus {
+    outline: none; 
+}
+
+.faq-container .faq-item .faq-question {
+    outline: none !important; 
+}
+
+.faq-item .faq-question:focus, .faq-item.open {
+    border-color: #4F3CC9;
+}
+
+.faq-item .faq-question:focus {
+    outline: none;
+}
+
+.faq-question {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background: none; /* No background to allow FAQ item styling to show through */
+    border: none; /* No border */
+    border-bottom:none;
+    margin-left: clamp(0.5rem, 0.75vw, 1rem);
+    font-size: clamp(0.85rem, 1.5vw, 1.5rem);
+    position: relative; /* Needed to apply z-index */
+    z-index: 2; /* Ensures the question is above the answer */
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #fff;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    padding: 0 20px; /* Padding transitions to 0 when closed */
+    border-top: none;
+    margin-left: clamp(0.5rem, 0.75vw, 1rem);
+    width: 80%;
+    position: relative; /* Ensure it respects z-index too */
+    z-index: 1; /* Lower than the question */
+    transition: max-height 0.75s ease-in-out;
+}
+
+.faq-answer p {
+    margin: 10px 0;
+    line-height: 1.4;
+    font-size: clamp(0.75rem, 0.9vw, 1.1rem);
+}
+
+.faq-question .icon {
+    float: right; /* Align the icon to the right */
+    margin-right: 2rem;
+    transition: transform 0.3s ease; /* Smooth transition for rotation */
+    color: #4F3CC9;
+    border-radius: 50%; /* Optional: Circular background */
+}
+
+.faq-question.open .icon {
+    transform: rotate(90deg); /* Rotates the icon to point downward */
+    background-color: #4F3CC9; /* Optional: Purple background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white; /* Optional: White icon color */
+    border-radius: 50%; /* Optional: Circular background */
+    padding: 5px; /* Optional: Padding for background circle */
+}
+
+.faq-container .faq-item .faq-answer {
+    margin-top: 0; /* Ensures no extra space above the answer */
+    padding-top: 0; /* Ensures content does not have extra top padding */
+    transform: translateY(-1.5rem); /* Pulls the answer up closer to the question */
+}
+
+.footer {
+    margin-top: 15rem;
+    background-color: white;
+    color: black;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-top: 2px solid #4F3CC9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between; /* Distributes space evenly */
+    align-items: stretch; /* Aligns items vertically in the center */
+    padding: 3rem 0;
+    padding-left: 13rem;
+}
+
+.footer-left {
+    margin-left: -5rem;
+    color: #6F6C90;
+}
+
+.footer-center {
+    margin-right: -9rem;
+}
+
+.footer-right {
+    margin-right: -10rem;
+    color: #6F6C90;
+}
+
+.footer-left, .footer-center, .footer-right {
+    flex: 1;
+    justify-content: space-between;
+    padding: 0 20px; /* Add padding to each section */
+}
+
+.footer-logo {
+    width: 150px;  /* Adjust the width as needed */
+    height: auto;  /* Maintains the aspect ratio */
+    display: block; /* Ensures the logo is block-level to manage layout */
+    margin-bottom: 1rem;
+    margin-top: -1.20rem;
+}
+
+.quick-links {
+    font-weight: bold;
+    color: #170F49;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.follow-us {
+    font-weight: bold;
+    color: #170F49;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-description {
+    width: 17rem; /* Constrain width of the text block */
+}
+
+.footer-links, .social-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li, .social-links li {
+    margin-bottom: 10px; /* Space between links */
+}
+
+.footer-links a, .social-links a {
+    color: #4F3CC9;
+    text-decoration: none;
+}
+
+.footer-links a {
+    color: #6F6C90;
+}
+
+.footer-links a:hover, .social-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    position: relative;
+    padding: 20px 100px; /* Adjusts the padding to create space on the sides */
+    text-align: center;
+}
+
+.footer-line {
+    border: 0;
+    height: 1px;
+    background-color: #ccc; /* Light grey line */
+    margin: 0 auto; /* Remove default margin */
+    margin-bottom: 1.5rem;
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+}
+
+.footer-bottom-left, .footer-bottom-right {
+    color: #6F6C90;
+    font-size: 14px;
+    position: absolute; /* Positioning it absolute to place it precisely */
+    top: 0; /* Align top to ensure it aligns with the top of the container */
+    white-space: nowrap; /* Prevents wrapping of text */
+}
+
+.footer-bottom-left {
+    left: 0; /* Aligns to the left */
+}
+
+.footer-bottom-right {
+    right: 0; /* Aligns to the right */
+} 
+
+.divider {
+    margin: 0 10px; /* Space around the dividers */
+    color: #ccc; /* Light grey divider to match the line */
+}
+
+.footer-bottom-right a {
+    color: black; /* Ensures link colors are consistent */
+    text-decoration: none;
+}
+
+.footer-bottom-right a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom-right a {
+    color: #4F3CC9;  /* Sets the link color */
+    text-decoration: underline;  /* Ensures the underline is always present */
 }
 
 @media (min-width: 768px) {
