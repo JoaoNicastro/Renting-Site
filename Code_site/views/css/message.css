@@ -29,9 +29,11 @@ body {
 }
 
 .time {
+    position: absolute;
     font-size: 0.5rem;
     color: #d1d1d1; /* Light grey for timestamp */
-    justify-content: flex-end; /* Align timestamps to the right of the message bubble */
+    right: 0; /* Align to the right of the message */
+    margin-right: 0.5rem;
 }
 
 #chat-header {
@@ -78,7 +80,7 @@ ul {
 form {
     display: flex;
     justify-content: center;
-    gap: 0.1rem;
+    gap: 0.6rem;
 }
 
 input, button {
@@ -87,11 +89,14 @@ input, button {
 }
 
 .message {
-    padding: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-right: 1.25rem;
     margin-bottom: 0.2rem;
-    border-radius: 20px;
+    border-radius: 15px;
     max-width: 70%; /* Limits the message width */
     overflow-wrap: anywhere;
+    position: relative;
     width: fit-content; /* Adjust width to fit content with a max limit */
 }
 
@@ -103,6 +108,17 @@ input, button {
     font-size: clamp(1rem, 2vw, 5rem);
 }
 
+.sent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0rem; /* Adjust to position the triangle */
+    width: 0;
+    height: 0;
+    border-top: 1rem solid #4F3CC9; /* Match the background color of the sent message */
+    border-left: 1rem solid transparent;
+}
+
 .received {
     display: block; /* Ensures block-level element behavior, allowing for max-width */
     width: fit-content; /* Width based on content, respecting max-width */
@@ -111,8 +127,19 @@ input, button {
     font-size: clamp(1rem, 2vw, 5rem);
 }
 
+.received::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0; /* Adjust to position the triangle */
+    width: 0;
+    height: 0;
+    border-top: 1rem solid #888888; /* Match the background color of the received message */
+    border-right: 1rem solid transparent;
+}
+
 #message-input {
-    width: 100%; /* Full-width to maximize input space */
+    width: 95%; /* Full-width to maximize input space */
     padding: 0.25rem; /* Padding for aesthetics */
     box-sizing: border-box; /* Includes padding in the width */
     border: 2px solid #ffffff; /* Example border */
@@ -139,6 +166,8 @@ input, button {
     align-items: center;
     justify-content: center;
     padding: 10px; /* Larger area for easier clicking */
+    height: clamp(2.5rem, 2.75vw, 3rem);
+    width: clamp(2.5rem, 2.75vw, 3rem);
     border-radius: 50%; /* Circular button */
     transition: transform 0.1s, box-shadow 0.1s; /* Smooth transition for transform and box-shadow */
     user-select: none; /* Prevents text selection */
@@ -150,4 +179,98 @@ input, button {
     box-shadow: 0 0 0 2px #ffffff; /* White shadow mimics an outline */
     background-color: #9747FF; /* Maintain the same background color */
     transform: scale(1.05); /* Slightly enlarge button on hover/focus */
+}
+
+.handshake-icon {
+    transform: scale(1.5);
+    cursor: pointer;
+    transition: transform 0.3s, color 0.3s;
+}
+
+.handshake-icon:hover {
+    transform: scale(1.75);
+    cursor: pointer;
+    color: #4F3CC9; /* Change color on hover */
+}
+
+.tooltip {
+    position: relative;
+    margin-left: auto; /* Pushes the tooltip all the way to the right */
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.tooltip .tooltiptext {
+    font-size: 0.65rem;
+    visibility: hidden;
+    background-color: #979797;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.25rem 0.3rem;
+    width: 6rem;
+    position: absolute;
+    z-index: 1;
+    top: 125%; /* Position the tooltip below the icon */
+    margin-left: -4.4rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top:-0.9rem; /* Adjust this value to move the triangle */
+    left: 80%;
+    transform: translateX(-50%);
+    border-width: 0.5rem;
+    border-style: solid;
+    border-color: transparent transparent #979797 transparent; /* Triangle pointing down */
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+#confirmation-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: center;
+}
+
+#confirmation-dialog p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: black;
+}
+
+#confirmation-dialog button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#confirm-roommate {
+    background-color: #4F3CC9;
+    color: white;
+}
+
+#cancel-roommate {
+    background-color: #888888;
+    color: white;
 }

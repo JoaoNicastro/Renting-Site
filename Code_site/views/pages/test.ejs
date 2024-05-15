@@ -6,12 +6,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Websockets</title>
     <link href="../css/message.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         var username = "<%= user.username %>"; // Ensure this is properly escaped to prevent XSS
         var chatWithUserId = "<%= chatWithUserId %>";
     </script>
     <script defer src = "../js/app.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script defer src = "../js/notification.js"></script>
+    <link rel="stylesheet" href="../css/notification.css">
 </head>
 <body>
     <div id="chat-header">
@@ -19,7 +23,11 @@
             <span class="material-symbols-outlined">Arrow_Back_iOS_New</span>
         </button>
         <h2 id="user-name">User's Name</h2>
-      </div>
+        <div class="tooltip">
+            <i id="set-roommate-button" class="material-symbols-outlined handshake-icon">Handshake</i>
+            <span class="tooltiptext">Set as Roommate</span>
+        </div>
+    </div>
     <div id="messages-container">
         <ul></ul>
     </div>
@@ -32,6 +40,12 @@
         </form>
     </div>
     <p class="activity"></p>
+
+    <div id="confirmation-dialog" class="hidden">
+        <p id="confirmation-message">Are you sure you want to set this user as your roommate?</p>
+        <button id="confirm-roommate">Yes</button>
+        <button id="cancel-roommate">No</button>
+    </div>
     <script>
         // Assuming this script is placed before the closing </body> tag or within a DOMContentLoaded listener
         document.addEventListener("DOMContentLoaded", function() {
@@ -39,8 +53,60 @@
             document.getElementById("user-name").textContent = chatWithUserId;
 
             document.getElementById("back-button").addEventListener("click", function() {
-            window.history.back();
+                window.history.back();
             });
+
+            document.getElementById("set-roommate-button").addEventListener("click", function() {
+                document.getElementById("confirmation-message").textContent = `Are you sure you want ${chatWithUserId} as your roommate?`;
+                document.getElementById("confirmation-dialog").classList.remove("hidden");
+
+                // Add a slight delay before attaching the document click listener
+                setTimeout(() => {
+                    document.addEventListener("click", outsideClickListener);
+                }, 10);
+            });
+
+            // Handle confirmation dialog buttons
+            document.getElementById("confirm-roommate").addEventListener("click", function() {
+                fetch('/set-roommate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, chatWithUserId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Roommate set successfully!");
+                        document.getElementById("confirmation-dialog").classList.add("hidden");
+                        document.getElementById("edit-preferences-container").classList.remove("hidden");
+                        document.removeEventListener("click", outsideClickListener); // Remove the click listener
+                        
+                        socket.emit('roommateRequest', { from: username, to: chatWithUserId });
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            document.getElementById("cancel-roommate").addEventListener("click", function() {
+                document.getElementById("confirmation-dialog").classList.add("hidden");
+                document.removeEventListener("click", outsideClickListener); // Remove the click listener
+            });
+
+            function outsideClickListener(event) {
+                const dialog = document.getElementById("confirmation-dialog");
+                const isClickInside = dialog.contains(event.target);
+                const isDialogVisible = !dialog.classList.contains("hidden");
+
+                if (!isClickInside && isDialogVisible) {
+                    dialog.classList.add("hidden");
+                    document.removeEventListener("click", outsideClickListener); // Remove the click listener
+            
+                }
+            }
         });
     </script>
 </body>

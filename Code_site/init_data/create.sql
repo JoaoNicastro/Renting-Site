@@ -70,3 +70,9 @@ CREATE TABLE IF NOT EXISTS chat_sessions (
   FOREIGN KEY (last_read_message_id) REFERENCES messages (id) ON DELETE SET NULL,
   UNIQUE (user_id, partner_id)  -- This is the new line to add
 );
+
+CREATE TABLE password_resets (
+  email VARCHAR(255) PRIMARY KEY,
+  code INTEGER NOT NULL,
+  expires_at TIMESTAMP NOT NULL
+);

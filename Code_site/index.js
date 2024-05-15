@@ -11,6 +11,8 @@ const session = require('express-session'); // To set the session object. To sto
 const bcrypt = require('bcrypt'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part B.
 const server = http.createServer(app); // Wrap the Express app
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const io = new Server(server); // Attach socket.io to the server
 
@@ -202,6 +204,108 @@ async function fetchLastMessageId(username, partnerUsername) {
   }
 }
 
+app.post('/set-roommate', async (req, res) => {
+  const { username, chatWithUserId } = req.body;
+
+  // Send email to the other user
+  const user = await db.oneOrNone('SELECT * FROM users WHERE username = $1', [chatWithUserId]);
+  if (user) {
+      const emailContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body {
+                    font-family: 'Poppins', sans-serif;
+                    background-color: #F7F5F7;
+                    margin: 0;
+                    padding: 0;
+                    text-align: center;
+                }
+                .container {
+                    background-color: #FAFAFF;
+                    margin: 2rem auto;
+                    padding: 2rem;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    max-width: 600px;
+                    text-align: left;
+                }
+                .logo {
+                    display: block;
+                    margin: 0 auto 1rem auto;
+                    width: 150px;
+                }
+                .title {
+                    font-size: 24px;
+                    color: #4F3CC9;
+                    margin-bottom: 1rem;
+                    text-align: center;
+                }
+                .text {
+                    font-size: 16px;
+                    color: #09150E;
+                    margin-bottom: 1rem;
+                }
+                .important {
+                    color: #9747FF;
+                    font-weight: bold;
+                }
+                .button {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: white;
+                    background-color: #9747FF;
+                    border-radius: 5px;
+                    text-align: center;
+                    text-decoration: none;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <img src="https://imgur.com/i2krjqn.png" alt="Unistays logo" class="logo">
+                <div class="title">Roommate Request</div>
+                <div class="text">
+                    <span class="important">${username}</span> has invited you to become roommates.
+                </div>
+                <div class="text">
+                    Please log in to your account to accept or deny the request.
+                </div>
+                <a href="http://your-domain.com/home" class="button">Go to Home Page</a>
+                <div class="footer">
+                    <p>Unistays</p>
+                </div>
+            </div>
+        </body>
+        </html>
+      `;
+      const mailOptions = {
+          from: process.env.EMAIL,
+          to: user.email,
+          subject: 'Roommate Request',
+          html: emailContent
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              console.log(error);
+              return res.json({ success: false, message: 'Error sending email' });
+          }
+          console.log('Email sent: ' + info.response);
+      });
+  }
+
+  // Notify the other user via Socket.io
+  io.to(`user_${chatWithUserId}`).emit('roommateRequest', { from: username });
+
+  res.json({ success: true });
+});
 
 app.get('/', (req, res) => {
     res.redirect('/discover');
@@ -659,7 +763,165 @@ app.get('/test', (req, res) => {
   }
 });
 
+const emailTemplate = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F7F5F7;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: #FAFAFF;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: left;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 1rem auto;
+            width: 10rem;
+            margin-bottom: 2rem;
+        }
+        .title {
+            font-size: 24px;
+            color: #4F3CC9;
+            margin-bottom: 1rem;
+        }
+        .text {
+            font-size: 16px;
+            color: #09150E;
+            margin-bottom: 1rem;
+        }
+        .code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4F3CC9;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .footer {
+            font-size: 16px;
+            color: #09150E;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://imgur.com/i2krjqn.png" alt="Unistays logo" class="logo">
+        <div class="title">Hello,</div>
+        <div class="text">
+            You are receiving this email because we received a password reset request for your account. Here is your verification code:
+        </div>
+        <div class="code">{{VERIFICATION_CODE}}</div>
+        <div class="text">
+            This verification code will expire in 5 minutes.
+        </div>
+        <div class="text">
+            If you did not request a password reset, no further action is required.
+        </div>
+        <div class="footer">
+            Unistays
+        </div>
+    </div>
+</body>
+</html>
+`;
 
+app.get('/forgot-password', (req, res) => {
+  res.render('pages/forgot-password', { user: req.session.user });
+});
+
+console.log('Email:', process.env.EMAIL);
+console.log('Email Password:', process.env.EMAIL_PASSWORD);
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // Use your email service provider
+  auth: {
+    user: process.env.EMAIL, // Your email address
+    pass: process.env.EMAIL_PASSWORD // Your email password
+  }
+});
+
+// In-memory store for reset codes
+const resetCodes = {};
+
+// Route to handle the forgot password form submission
+app.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
+
+  if (user) {
+    const verificationCode = crypto.randomInt(100000, 999999);
+    const expiresAt = Date.now() + 300000; // Expires in 5 minutes
+
+    // Store the verification code and expiration time in memory
+    resetCodes[email] = { code: verificationCode, expiresAt };
+
+    const emailContent = emailTemplate.replace('{{VERIFICATION_CODE}}', verificationCode);
+    // Send email with the verification code
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: 'Password Reset Verification Code',
+      html: emailContent
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        res.json({ success: false, message: 'Error sending email' });
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.json({ success: true });
+      }
+    });
+
+    // Set a timeout to delete the code from memory after 5 minutes
+    setTimeout(() => {
+      delete resetCodes[email];
+    }, 300000);
+  } else {
+    res.json({ success: false, message: 'Email not found' });
+  }
+});
+
+// Route to handle the verification code submission
+app.post('/verify-code', (req, res) => {
+  const { email, code } = req.body;
+  const record = resetCodes[email];
+
+  if (record && record.code === parseInt(code) && record.expiresAt > Date.now()) {
+    res.json({ success: true });
+  } else {
+    res.json({ success: false, message: 'Invalid or expired verification code' });
+  }
+});
+
+// Route to handle the password reset form submission
+app.post('/reset-password', async (req, res) => {
+  const { email, password } = req.body;
+
+  const hash = await bcrypt.hash(password, 10);
+
+  try {
+      await db.none('UPDATE users SET password = $1 WHERE email = $2', [hash, email]);
+      res.json({ success: true });
+  } catch (error) {
+      console.error('Error resetting password:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
 
 // TODO - Include your API routes here
 
