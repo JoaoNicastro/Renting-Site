@@ -1,5 +1,3 @@
-const socket = io()
-
 const activity = document.querySelector('.activity')
 const msgInput = document.querySelector('input')
 

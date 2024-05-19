@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Your Matches</title>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Declare the socket variable globally
+        const socket = io();
+    </script>
     <script defer src = "../js/notification.js"></script>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../css/notification.css">
+    <link rel="stylesheet" href="../css/header.css">
     <script>
         window.onload = function() {
             if (!sessionStorage.getItem("reloaded")) {
@@ -18,14 +23,18 @@
     </script>
 </head>
 <body>
+    <%- include('../partials/header') %>
+
     <link rel="stylesheet" href="../css/matches.css">
     <header class="header">
-        <img src="../img/Logo.png" alt="Unistays Logo" class="unistays-logo">
         <div class="navigation">
             <button id="discover-btn">Discover</button>
             <button id="chats-btn">Chats</button>
         </div>
     </header>
+
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
+
     <div id="discover" style="display: block;">
         <h1>Your Top Matches</h1>
         <div id="matches">
@@ -63,6 +72,7 @@
             <% } %>
         </div>
     </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

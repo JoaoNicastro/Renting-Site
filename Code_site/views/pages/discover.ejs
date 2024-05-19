@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Declare the socket variable globally
+        const socket = io();
+    </script>
+    <script defer src = "../js/notification.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include('../partials/head.ejs') %> <!-- Include the head content -->
     <title>Your Ideal Student Stay</title>
@@ -11,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
 </head>
 <body>
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
     <div class="content-limiter">
     <%- include('../partials/menu.ejs') %> <!--  Include the navigation menu -->
     <link rel="stylesheet" href="../css/styles.css">
@@ -290,140 +297,150 @@
 
     <%- include('../partials/footer.ejs') %> <!-- Include the footer content -->
     <script>
-    function toggleFaq(faqId) {
-        var answer = document.getElementById(faqId);
-        var question = answer.previousElementSibling;
-        var icon = question.querySelector('.icon');
-        var isOpen = question.classList.contains('open');
-        var faqItem = answer.closest('.faq-item');
-
-        if (!isOpen) {
-            question.classList.add('open');
-            question.classList.add('open');
-            faqItem.classList.add('open');
-            answer.style.maxHeight = '10rem';
-            icon.innerHTML = 'chevron_right';
-        } else {
-            question.classList.remove('open');
-            answer.classList.remove('open');
-            faqItem.classList.remove('open');
-            requestAnimationFrame(() => {
-                answer.style.maxHeight = '0';
+        const userDataDiv = document.getElementById('user-data');
+        const username = userDataDiv.getAttribute('data-username');
+        if (username) {
+            const socket = io();
+            socket.on('connect', () => {
+                socket.emit('joinUserRoom', { username });
+                console.log(`joinUserRoom event emitted for ${username}`);
             });
-            answer.style.padding = '0 20px';
-            icon.innerHTML = 'chevron_right';
         }
-    }
 
-    function setupFaqListeners() {
-        const allAnswers = document.querySelectorAll('.faq-answer');
-        allAnswers.forEach(answer => {
-            answer.addEventListener('transitionend', function(event) {
-                if (event.propertyName === 'max-height' && this.style.maxHeight !== '0px') {
-                    this.style.maxHeight = 'none';  // Allows the container to fit exactly to its content after opening
-                }
-            });
-        });
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        setupFaqListeners();
+        function toggleFaq(faqId) {
+            var answer = document.getElementById(faqId);
+            var question = answer.previousElementSibling;
+            var icon = question.querySelector('.icon');
+            var isOpen = question.classList.contains('open');
+            var faqItem = answer.closest('.faq-item');
 
-        var allAnswers = document.querySelectorAll('.faq-answer');
-        allAnswers.forEach(function(answer) {
-            answer.style.maxHeight = '0'; // Ensure all are closed initially
-            answer.style.padding = '0 20px'; // Ensure padding is removed initially
-        });
-        
-        const tabs = document.querySelectorAll('.pricing-option'); // Changed from '.tab' to '.pricing-option' to correctly select the tabs
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Adjust all tabs
-                tabs.forEach(t => {
-                    t.classList.remove('selected');
-                    const contentId = `tab${t.id.slice(-1)}`;
-                    document.getElementById(contentId).style.display = 'none';
-                    document.getElementById(contentId).classList.remove('active');
+            if (!isOpen) {
+                question.classList.add('open');
+                question.classList.add('open');
+                faqItem.classList.add('open');
+                answer.style.maxHeight = '10rem';
+                icon.innerHTML = 'chevron_right';
+            } else {
+                question.classList.remove('open');
+                answer.classList.remove('open');
+                faqItem.classList.remove('open');
+                requestAnimationFrame(() => {
+                    answer.style.maxHeight = '0';
                 });
-
-                // Activate clicked tab
-                this.classList.add('selected');
-                const activeContentId = `tab${this.id.slice(-1)}`;
-                document.getElementById(activeContentId).style.display = 'block';
-                document.getElementById(activeContentId).classList.add('active');
-            });
-        });
-        document.getElementById('option2').click();
-        
-        const sliderData = [
-            { src: "../img/Shot-iphone1.png", name: "Helena", stars: "★★★★★", testimonial: "I found the perfect apartment within my budget in the area I was searching for. I was notified as soon as it was listed, getting me a viewing. I can't believe I found my apartment this fast. Thanks for the service!" },
-            { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." },
-            { src: "../img/Shot-iphone1.png", name: "Sarah", stars: "★★★★★", testimonial: "Amazing service, quick and reliable, found a roommate in no time!" },
-            { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." },
-            { src: "../img/Shot-iphone1.png", name: "Sarah", stars: "★★★★★", testimonial: "Amazing service, quick and reliable, found a roommate in no time!" },
-            { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." }
-        ];
-
-        const sliderContainer = document.querySelector('.image-slider');
-        const nameElement = document.querySelector('.testimonial-name');
-        const starsElement = document.querySelector('.testimonial-stars');
-        const textElement = document.querySelector('.testimonial-paragraph');
-
-
-        let current = 1; // Start at 1 to make the first image appear centered initially
-
-        const images = sliderData.map(data => {
-            const img = document.createElement('img');
-            img.className = 'slider-img';
-            img.src = data.src;
-            sliderContainer.appendChild(img);
-            return img;
-        });
-        function updateStyles() {
-            images.forEach((img, index) => {
-                let offset = index - current;
-                if (index < current - 1) {
-                    offset += sliderData.length;
-                } else if (index > current + 1) {
-                    offset -= sliderData.length;
-                }
-                img.style.transform = `translateX(${offset * 100}%)`; // Apply the movement
-
-                img.style.zIndex = index === current ? 10 : 5; // Ensure center image is always on top
-            
-                // Adjust the size of left and right images
-                if (index !== current) {
-                    img.style.transform += ' scale(0.9)'; // Adjust the width as needed
-                } else {
-                    img.style.transform += ' scale(1)'; // Set the width back to 100% for the center image
-                }
-            });
-
-            
-            nameElement.textContent = sliderData[current].name;
-            starsElement.textContent = sliderData[current].stars;
-            textElement.textContent = sliderData[current].testimonial;
-        }
-
-        function slideImages() {
-            current = (current + 1) % sliderData.length;
-            updateStyles();
-
-            if (current === 0) {  // We're wrapping around to the start, after the first complete cycle
-                let leftImage = images.shift();  // Remove the first image and get it
-                images.push(leftImage);  // Append it to the end
-                sliderContainer.appendChild(leftImage);  // Also adjust the DOM accordingly
+                answer.style.padding = '0 20px';
+                icon.innerHTML = 'chevron_right';
             }
         }
 
-        // Set initial styles
-        updateStyles();
+        function setupFaqListeners() {
+            const allAnswers = document.querySelectorAll('.faq-answer');
+            allAnswers.forEach(answer => {
+                answer.addEventListener('transitionend', function(event) {
+                    if (event.propertyName === 'max-height' && this.style.maxHeight !== '0px') {
+                        this.style.maxHeight = 'none';  // Allows the container to fit exactly to its content after opening
+                    }
+                });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFaqListeners();
 
-        // Start the automatic sliding every 5 seconds
-        setInterval(slideImages, 5000);
-    });
+            var allAnswers = document.querySelectorAll('.faq-answer');
+            allAnswers.forEach(function(answer) {
+                answer.style.maxHeight = '0'; // Ensure all are closed initially
+                answer.style.padding = '0 20px'; // Ensure padding is removed initially
+            });
+            
+            const tabs = document.querySelectorAll('.pricing-option'); // Changed from '.tab' to '.pricing-option' to correctly select the tabs
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Adjust all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('selected');
+                        const contentId = `tab${t.id.slice(-1)}`;
+                        document.getElementById(contentId).style.display = 'none';
+                        document.getElementById(contentId).classList.remove('active');
+                    });
+
+                    // Activate clicked tab
+                    this.classList.add('selected');
+                    const activeContentId = `tab${this.id.slice(-1)}`;
+                    document.getElementById(activeContentId).style.display = 'block';
+                    document.getElementById(activeContentId).classList.add('active');
+                });
+            });
+            document.getElementById('option2').click();
+            
+            const sliderData = [
+                { src: "../img/Shot-iphone1.png", name: "Helena", stars: "★★★★★", testimonial: "I found the perfect apartment within my budget in the area I was searching for. I was notified as soon as it was listed, getting me a viewing. I can't believe I found my apartment this fast. Thanks for the service!" },
+                { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." },
+                { src: "../img/Shot-iphone1.png", name: "Sarah", stars: "★★★★★", testimonial: "Amazing service, quick and reliable, found a roommate in no time!" },
+                { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." },
+                { src: "../img/Shot-iphone1.png", name: "Sarah", stars: "★★★★★", testimonial: "Amazing service, quick and reliable, found a roommate in no time!" },
+                { src: "../img/Shot-iphone1.png", name: "John", stars: "★★★★", testimonial: "Very responsive and helpful. I got my dream place without hassle." }
+            ];
+
+            const sliderContainer = document.querySelector('.image-slider');
+            const nameElement = document.querySelector('.testimonial-name');
+            const starsElement = document.querySelector('.testimonial-stars');
+            const textElement = document.querySelector('.testimonial-paragraph');
+
+
+            let current = 1; // Start at 1 to make the first image appear centered initially
+
+            const images = sliderData.map(data => {
+                const img = document.createElement('img');
+                img.className = 'slider-img';
+                img.src = data.src;
+                sliderContainer.appendChild(img);
+                return img;
+            });
+            function updateStyles() {
+                images.forEach((img, index) => {
+                    let offset = index - current;
+                    if (index < current - 1) {
+                        offset += sliderData.length;
+                    } else if (index > current + 1) {
+                        offset -= sliderData.length;
+                    }
+                    img.style.transform = `translateX(${offset * 100}%)`; // Apply the movement
+
+                    img.style.zIndex = index === current ? 10 : 5; // Ensure center image is always on top
+                
+                    // Adjust the size of left and right images
+                    if (index !== current) {
+                        img.style.transform += ' scale(0.9)'; // Adjust the width as needed
+                    } else {
+                        img.style.transform += ' scale(1)'; // Set the width back to 100% for the center image
+                    }
+                });
+
+                
+                nameElement.textContent = sliderData[current].name;
+                starsElement.textContent = sliderData[current].stars;
+                textElement.textContent = sliderData[current].testimonial;
+            }
+
+            function slideImages() {
+                current = (current + 1) % sliderData.length;
+                updateStyles();
+
+                if (current === 0) {  // We're wrapping around to the start, after the first complete cycle
+                    let leftImage = images.shift();  // Remove the first image and get it
+                    images.push(leftImage);  // Append it to the end
+                    sliderContainer.appendChild(leftImage);  // Also adjust the DOM accordingly
+                }
+            }
+
+            // Set initial styles
+            updateStyles();
+
+            // Start the automatic sliding every 5 seconds
+            setInterval(slideImages, 5000);
+        });
     </script>        
 </body>
 </html>

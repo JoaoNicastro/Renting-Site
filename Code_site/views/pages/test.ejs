@@ -12,12 +12,17 @@
         var username = "<%= user.username %>"; // Ensure this is properly escaped to prevent XSS
         var chatWithUserId = "<%= chatWithUserId %>";
     </script>
+    <script>
+        // Declare the socket variable globally
+        const socket = io();
+    </script>
     <script defer src = "../js/app.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script defer src = "../js/notification.js"></script>
     <link rel="stylesheet" href="../css/notification.css">
 </head>
 <body>
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
     <div id="chat-header">
         <button id="back-button" class="back-button">
             <span class="material-symbols-outlined">Arrow_Back_iOS_New</span>
@@ -45,6 +50,12 @@
         <p id="confirmation-message">Are you sure you want to set this user as your roommate?</p>
         <button id="confirm-roommate">Yes</button>
         <button id="cancel-roommate">No</button>
+    </div>
+
+    <div id="roommate-request-banner" class="hidden">
+        <p id="roommate-request-message"></p>
+        <button id="accept-roommate-request">Accept</button>
+        <button id="deny-roommate-request">Deny</button>
     </div>
     <script>
         // Assuming this script is placed before the closing </body> tag or within a DOMContentLoaded listener

@@ -303,6 +303,7 @@ app.post('/set-roommate', async (req, res) => {
 
   // Notify the other user via Socket.io
   io.to(`user_${chatWithUserId}`).emit('roommateRequest', { from: username });
+  console.log(`roommateRequest event emitted to user_${chatWithUserId} from ${username}`);
 
   res.json({ success: true });
 });
@@ -686,25 +687,10 @@ app.get('/register', (req, res) => {
 // GET /discover
 app.get('/discover', async (req, res) => {
   try {
-      const response = await axios({
-          url: 'https://app.ticketmaster.com/discovery/v2/events.json',
-          method: 'GET',
-          headers: {
-              'Accept-Encoding': 'application/json',
-          },
-          params: {
-              apikey: process.env.API_KEY,
-              // keyword: 'artist', // you can change this
-              size: 10 // fetch 10 events
-          }
-      });
 
-      const events = response.data._embedded ? response.data._embedded.events : [];
-      console.log(events);
-      console.log(response.data);
 
       // Render the view with the fetched events and user information
-      res.render('pages/discover', { events, user: req.session.user });
+      res.render('pages/discover', { events : [], user: req.session.user });
 
   } catch (error) {
       console.error(error);
@@ -921,6 +907,10 @@ app.post('/reset-password', async (req, res) => {
       console.error('Error resetting password:', error);
       res.status(500).json({ success: false, message: 'Internal server error' });
   }
+});
+
+app.get('/home', (req, res) => {
+  res.render('pages/home', { user: req.session.user });
 });
 
 // TODO - Include your API routes here

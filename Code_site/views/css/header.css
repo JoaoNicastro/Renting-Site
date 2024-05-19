@@ -1,0 +1,70 @@
+body, * {
+    font-family: 'Poppins', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    margin: 0 5%; /* Add space on the left and right */
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-button,
+.nav-icons {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    max-height: 40px;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+}
+
+.notification-icon {
+    position: relative;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.notification-icon .material-icons {
+    font-size: 24px;
+}
+
+#notification-count {
+    position: absolute;
+    top: 13px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 15px; /* Set width and height to the same value */
+    height: 15px;
+    display: flex; /* Center the text inside the circle */
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    padding: 0; /* Remove padding to ensure the circle shape */
+    line-height: 1; /* Adjust line height */
+}
+
+.hidden {
+    display: none;
+}
+
+.profile-icon .material-icons {
+    font-size: 24px;
+    cursor: pointer;
+}

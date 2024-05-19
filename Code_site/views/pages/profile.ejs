@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Declare the socket variable globally
+        const socket = io();
+    </script>
     <script defer src = "../js/notification.js"></script>
     <link rel="stylesheet" href="../css/notification.css">
     <%- include('../partials/head'); %>
@@ -9,6 +13,8 @@
 </head>
 <body>
     <%- include('../partials/menu'); %>
+
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
 
     <main class="container mt-5">
         <h1>User Profile</h1>
@@ -33,6 +39,12 @@
         </div>
 
         <a href="/edit-profile" class="btn btn-primary mt-3">Edit Profile</a>
+
+        <div id="roommate-request-banner" class="hidden">
+            <p id="roommate-request-message"></p>
+            <button id="accept-roommate-request">Accept</button>
+            <button id="deny-roommate-request">Deny</button>
+        </div>
     </main>
 
     <%- include('../partials/footer'); %>

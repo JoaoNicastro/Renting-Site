@@ -76,3 +76,11 @@ CREATE TABLE password_resets (
   code INTEGER NOT NULL,
   expires_at TIMESTAMP NOT NULL
 );
+
+CREATE TABLE notifications (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
