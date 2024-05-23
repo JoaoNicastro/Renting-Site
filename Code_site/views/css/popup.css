@@ -1,0 +1,225 @@
+body, * {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#open-popup {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 10px 40px; /* Add padding to create space inside the popup */
+    border-radius: 8px;
+    width: 75%;
+    height: 70%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-popup {
+    cursor: pointer;
+    color: black; /* Set your desired color */
+    font-size: 50px; /* Adjust size as needed */
+}
+
+.logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
+
+.unistays-logo {
+    max-height: 60px; /* Adjust the height as needed */
+}
+
+.registration-step {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 140px); /* Adjust height to account for logo and button */
+}
+
+.where-to {
+    font-weight: bold;
+}
+
+.form-section {
+    width: 50%;
+    padding-right: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+}
+
+#residence-container .search-icon {
+    top: 35%; 
+    transform: translateY(-50%);
+}
+
+#study-container .search-icon {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#map {
+    width: 60%;
+    height: 90%; /* Adjust the height as needed */
+    background-color: #ddd;
+    position: relative;
+}
+
+#next-step {
+    width: calc(100% - 80px); /* Full width minus the left and right padding of .popup-content */
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4F3CC9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 20px;
+    left: 40px; /* Align with left padding of .popup-content */
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Add padding to accommodate the icon */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="text"]:disabled {
+    background-color: #b4b4b4; /* Grayish background */
+    cursor: not-allowed; /* Change cursor to indicate disabled */
+}
+
+#residence {
+    margin-bottom: 20px; /* Increase the margin to add more space below the first text box */
+}
+
+#study {
+    margin-bottom: 0px; /* Decrease the margin to reduce space below the second text box */
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    margin-top: -10px; /* Reduce the margin-top to bring the checkbox closer to the text box */
+}
+
+.checkbox-container label {
+    font-size: 14px; /* Decrease the font size */
+    position: relative;
+    top: -2px; /* Adjust the top position to move the label up slightly */
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4F3CC9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.max-radius {
+    font-weight: bold;
+    margin-top: 2.5vw;
+}
+
+#radius-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+    background-color: #9747FF; /* Purple background for the entire container */
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#radius {
+    width: 80%; /* Adjust width to make room for the radius value */
+    margin-right: 10px;
+    -webkit-appearance: none; /* Remove default slider styling for webkit browsers */
+    appearance: none; /* Remove default slider styling */
+    height: 10px; /* Adjust the height of the slider track */
+    background: #CCFF00; /* White background for the slider track */
+    border-radius: 5px;
+}
+
+#radius::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default slider thumb styling for webkit browsers */
+    appearance: none; /* Remove default slider thumb styling */
+    width: 20px; /* Adjust the size of the slider thumb */
+    height: 20px; /* Adjust the size of the slider thumb */
+    background: #CCFF00; /* Slider thumb color */
+    border-radius: 50%; /* Make the thumb round */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+#radius::-moz-range-thumb {
+    width: 20px; /* Adjust the size of the slider thumb */
+    height: 20px; /* Adjust the size of the slider thumb */
+    background: #4F3CC9; /* Slider thumb color */
+    border-radius: 50%; /* Make the thumb round */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+#radius-value {
+    font-size: 16px;
+    white-space: nowrap;
+    background-color: white; /* White background for the radius value */
+    padding: 2px 5px; /* Add padding around the radius value */
+    border-radius: 5px; /* Add border radius to the radius value */
+    margin-left: 10px;
+    width: 15%;
+}

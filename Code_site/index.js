@@ -84,8 +84,13 @@ function fetchMessages(fromUsername, toUsername) {
 }
 
 io.on('connection', socket => {
-  socket.on('joinUserRoom', (data) => {
+  socket.on('joinUserRoom', async (data) => {
     socket.join(`user_${data.username}`);  // Joins a room named 'user_USERNAME'
+  
+    const unreadCount = await db.one('SELECT COUNT(*) FROM notifications WHERE username = $1 AND is_read = FALSE', 
+                                     [data.username], 
+                                     a => +a.count);
+    socket.emit('updateNotificationCount', { count: unreadCount });
   });
 
   socket.on('joinChat', data => {
@@ -301,9 +306,14 @@ app.post('/set-roommate', async (req, res) => {
       });
   }
 
+  await db.none('INSERT INTO notifications (username, message, is_read) VALUES ($1, $2, $3)', [
+    chatWithUserId, `${username} has invited you to become roommates.`, false
+  ]);
   // Notify the other user via Socket.io
   io.to(`user_${chatWithUserId}`).emit('roommateRequest', { from: username });
   console.log(`roommateRequest event emitted to user_${chatWithUserId} from ${username}`);
+
+  io.to(`user_${chatWithUserId}`).emit('incrementNotificationCount');
 
   res.json({ success: true });
 });
@@ -911,6 +921,101 @@ app.post('/reset-password', async (req, res) => {
 
 app.get('/home', (req, res) => {
   res.render('pages/home', { user: req.session.user });
+});
+
+app.get('/notifications', async (req, res) => {
+  if (!req.session.user) {
+    return res.json({ success: false, message: 'User not logged in' });
+  }
+  const { username } = req.session.user;
+  try {
+    const notifications = await db.any('SELECT * FROM notifications WHERE username = $1 ORDER BY created_at DESC', [username]);
+    console.log('Fetched notifications:', notifications);
+    res.json({ success: true, notifications });
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    res.json({ success: false, message: 'Error fetching notifications' });
+  }
+});
+
+app.post('/mark-notifications-read', async (req, res) => {
+  const { username } = req.session.user;
+  try {
+    await db.none('UPDATE notifications SET is_read = TRUE WHERE username = $1', [username]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error marking notifications as read:', error);
+    res.json({ success: false, message: 'Error marking notifications as read' });
+  }
+});
+
+app.get('/unread-notifications-count', async (req, res) => {
+  if (!req.session.user) {
+    return res.json({ success: false, message: 'User not logged in' });
+  }
+  const { username } = req.session.user;
+  try {
+    const unreadCount = await db.one('SELECT COUNT(*) FROM notifications WHERE username = $1 AND is_read = FALSE', [username], a => +a.count);
+    res.json({ success: true, count: unreadCount });
+  } catch (error) {
+    console.error('Error fetching unread notifications count:', error);
+    res.json({ success: false, message: 'Error fetching unread notifications count' });
+  }
+});
+
+app.get('/view-all-notifications', async (req, res) => {
+  if (!req.session.user) {
+      return res.redirect('/login');
+  }
+  const { username } = req.session.user;
+  try {
+      const notifications = await db.any('SELECT * FROM notifications WHERE username = $1 ORDER BY created_at DESC', [username]);
+      res.render('pages/view-all-notifications', { notifications, user: req.session.user });
+  } catch (error) {
+      console.error('Error fetching notifications:', error);
+      res.render('pages/notifications', { notifications: [], errorMessage: 'Error fetching notifications', user: req.session.user });
+  }
+});
+
+app.get('/apartments', async (req, res) => {
+  try {
+      const { username } = req.session.user;
+      console.log('Username from session:', username);
+
+      const result = await db.query('SELECT * FROM matched_apartments WHERE username = $1 ORDER BY matched_at DESC', [username]);
+
+      let apartments = [];
+      if (Array.isArray(result)) {
+          apartments = result.map(row => ({
+              id: row.id,
+              username: row.username,
+              matched_at: row.matched_at,
+              link: row.link,
+              title: row.title,
+              city: row.city,
+              address: row.address,
+              price: row.price,
+              size: row.size,
+              bedrooms: row.bedrooms,
+              furnished: row.furnished,
+              image_link: row.image_link,
+              contact_link: row.contact_link
+          }));
+      } else if (result && result.rows) {
+          apartments = result.rows;
+      }
+
+      console.log('Fetched apartments:', apartments); // Log the fetched apartments to verify data retrieval
+
+      res.render('pages/apartments', { apartments, user: req.session.user });
+  } catch (error) {
+      console.error('Error fetching matched apartments:', error);
+      res.status(500).send('Error fetching matched apartments');
+  }
+});
+
+app.get('/popuptest', (req, res) => {
+  res.render('pages/popuptest', { user: req.session.user, currentStep: 1 });
 });
 
 // TODO - Include your API routes here

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+<body>
+    <%- include('../partials/header', { user: user }) %>
+
+    <div class="notifications-container">
+        <h2>All Notifications</h2>
+        <ul>
+            <% notifications.forEach(notification => { %>
+                <li>
+                    <p><%= notification.message %></p>
+                    <small><%= notification.created_at %></small>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+</body>
+</html>

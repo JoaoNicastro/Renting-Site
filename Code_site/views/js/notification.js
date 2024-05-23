@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
+    const notificationCount = document.getElementById('notification-count');
+
     // Join the user's own room
     socket.on('connect', () => {
         console.log('Connected to socket.io server');
@@ -32,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('view-request').addEventListener('click', () => {
             window.location.href = '/home';
+            document.body.removeChild(notification);
         });
+
+        const notificationCount = document.getElementById('notification-count');
+        notificationCount.textContent = parseInt(notificationCount.textContent || '0') + 1;
+        notificationCount.classList.remove('hidden');
     });
 });

@@ -1,22 +1,237 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
 <header>
-    <nav class="navbar">
-      <div class="menu-button">
-        <span class="material-symbols-outlined menu">menu</span>
+  <nav class="navbar">
+      <div class="menu-button" id="menu-button">
+          <span class="material-symbols-outlined menu-icon">menu</span>
       </div>
       <div class="logo">
-        <img src="../img/Logo.png" alt="Unistays Logo">
+        <a href="/home">
+            <img src="../img/Logo.png" alt="Unistays Logo">
+        </a>
       </div>
       <div class="nav-icons">
-        <div class="notification-icon">
-          <span class="material-symbols-outlined notifications">notifications</span>
-          <span id="notification-count" class="hidden">0</span>
-        </div>
-        <div class="profile-icon">
-          <span class="material-symbols-outlined account">person</span>
-        </div>
+          <div class="notification-icon" id="notification-icon">
+              <span class="material-symbols-outlined notifications">notifications</span>
+              <span id="notification-count" class="hidden">0</span>
+              <div id="notification-dropdown" class="notification-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notification-list"></ul>
+                    <button id="view-all-notifications" class="hidden">View All Notifications</button>
+              </div>
+          </div>
+          <div class="profile-icon" id="profile-icon">
+            <span class="material-symbols-outlined account">person</span>
+            <div id="profile-dropdown" class="profile-dropdown hidden">
+                <ul>
+                    <li id="profile-link" class="profile-item">Profile</li>
+                    <li id="logout-link" class="logout-item">Log Out</li>
+                </ul>
+            </div>
+          </div>
       </div>
-    </nav>
+  </nav>
 </header>
+
+<div id="menu" class="menu">
+    <div class="menu-header">
+        <a href="/home">
+            <img src="../img/Logo.png" alt="Unistays Logo" class="menu-logo">
+        </a>
+        <span id="close-menu" class="material-symbols-outlined close-menu">close</span>
+    </div>
+    <ul class="menu-items">
+        <li>
+            <span class="material-symbols-outlined menu-icon">home</span>
+            <a href="/home">Home</a>
+        </li>
+        <li>
+            <span class="material-symbols-outlined menu-icon">group</span>
+            <a href="/matches">Matches</a>
+            <ul class="sub-menu">
+                <li>
+                    <span class="material-symbols-outlined menu-icon">search</span>
+                    <a href="/discover">Discover</a>
+                </li>
+                <li>
+                    <span class="material-symbols-outlined menu-icon">chat</span>
+                    <a href="/messages">Chats</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <span class="material-symbols-outlined menu-icon">people</span>
+            <a href="/roommates">Roommates</a>
+        </li>
+        <li>
+            <span class="material-symbols-outlined menu-icon">apartment</span>
+            <a href="/apartments">Apartments</a>
+        </li>
+        <li>
+            <span class="material-symbols-outlined menu-icon">person</span>
+            <a href="/profile">Profile</a>
+        </li>
+    </ul>
+    <li style="margin-top: auto;" class="logout">
+        <span class="material-symbols-outlined menu-icon">logout</span>
+        <a href="/logout">Logout</a>
+    </li>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationList = document.getElementById('notification-list');
+    const notificationCountElement = document.getElementById('notification-count');
+    const viewAllNotificationsButton = document.getElementById('view-all-notifications');
+
+    const profileIcon = document.getElementById('profile-icon');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileLink = document.getElementById('profile-link');
+    const logoutLink = document.getElementById('logout-link');
+
+    const menuButton = document.getElementById('menu-button');
+    const menu = document.getElementById('menu');
+    const closeMenuButton = document.getElementById('close-menu');
+
+    let notificationCount = 0;
+
+    const userDataDiv = document.getElementById('user-data');
+    const username = userDataDiv ? userDataDiv.getAttribute('data-username') : null;
+
+    if (username) {
+        socket.emit('joinUserRoom', { username });
+        console.log(`joinUserRoom event emitted for ${username}`);
+
+        try {
+            const response = await fetch('/unread-notifications-count');
+            const data = await response.json();
+            if (data.success) {
+                notificationCount = data.count;
+                notificationCountElement.textContent = notificationCount;
+                if (notificationCount > 0) {
+                    notificationCountElement.classList.remove('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching unread notifications count:', error);
+        }
+    }
+
+    socket.on('roommateRequest', (data) => {
+        console.log(`Received roommateRequest event from ${data.from}`);
+        notificationCount++;
+        notificationCountElement.textContent = notificationCount;
+        notificationCountElement.classList.remove('hidden');
+
+        const requestElement = document.createElement('li');
+        requestElement.innerHTML = `
+            <p><span class="notification-name">${data.from}</span> has invited you to become roommates.</p>
+        `;
+        notificationList.prepend(requestElement);
+
+        requestElement.addEventListener('click', () => {
+            window.location.href = '/home';
+        });
+
+        if (notificationList.children.length > 4) {
+            notificationList.removeChild(notificationList.lastChild);
+        }
+
+        if (notificationList.children.length >= 4) {
+            viewAllNotificationsButton.classList.remove('hidden');
+        }
+    });
+
+    notificationIcon.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        notificationDropdown.classList.toggle('hidden');
+        profileDropdown.classList.add('hidden');
+
+        if (!notificationDropdown.classList.contains('hidden')) {
+            notificationCount = 0;
+            notificationCountElement.textContent = notificationCount;
+            notificationCountElement.classList.add('hidden');
+
+            try {
+                const response = await fetch('/notifications');
+                const data = await response.json();
+                if (data.success) {
+                    notificationList.innerHTML = '';
+                    data.notifications.slice(0, 4).forEach(notification => {
+                        const firstWord = notification.message.split(' ')[0];
+                        const restOfMessage = notification.message.substring(firstWord.length);
+                        const requestElement = document.createElement('li');
+                        requestElement.innerHTML = `
+                            <p><span class="notification-name">${firstWord}</span>${restOfMessage}</p>
+                        `;
+                        requestElement.addEventListener('click', () => {
+                            window.location.href = '/home';
+                        });
+                        notificationList.appendChild(requestElement);
+                    });
+
+                    if (data.notifications.length > 4) {
+                        viewAllNotificationsButton.classList.remove('hidden');
+                    } else {
+                        viewAllNotificationsButton.classList.add('hidden');
+                    }
+
+                    await fetch('/mark-notifications-read', { method: 'POST' });
+                }
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        }
+    });
+
+    viewAllNotificationsButton.addEventListener('click', () => {
+        window.location.href = '/view-all-notifications';
+    });
+
+    profileIcon.addEventListener('click', (event) => {
+        event.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+        notificationDropdown.classList.add('hidden');
+    });
+
+    profileLink.addEventListener('click', () => {
+        window.location.href = '/profile';
+    });
+
+    logoutLink.addEventListener('click', () => {
+        window.location.href = '/logout';
+    });
+
+    menuButton.addEventListener('click', () => {
+        menu.classList.toggle('show');
+        menu.style.transform = 'translateX(0)';
+        menuButton.style.visibility = 'hidden';
+    });
+
+    closeMenuButton.addEventListener('click', () => {
+        menu.classList.remove('show');
+        menu.style.transform = 'translateX(-100%)';
+        setTimeout(() => {
+            menuButton.style.visibility = 'visible';
+        }, 300);
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!notificationDropdown.contains(event.target) && !notificationIcon.contains(event.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+        if (!profileDropdown.contains(event.target) && !profileIcon.contains(event.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!menu.contains(event.target) && !closeMenuButton.contains(event.target) && !menuButton.contains(event.target)) {
+            menu.classList.remove('show');
+            menu.style.transform = 'translateX(-100%)';
+            menuButton.style.visibility = 'visible';
+        }
+    });
+  });
+</script>

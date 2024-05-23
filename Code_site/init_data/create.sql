@@ -84,3 +84,20 @@ CREATE TABLE notifications (
   is_read BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE matched_apartments (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    matched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    link VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    price VARCHAR(50) NOT NULL,
+    size VARCHAR(50) NOT NULL,
+    bedrooms INTEGER NOT NULL,
+    furnished BOOLEAN NOT NULL,
+    image_link VARCHAR(255) NOT NULL,
+    contact_link VARCHAR(255) NOT NULL,
+    FOREIGN KEY (username) REFERENCES users(username)
+);

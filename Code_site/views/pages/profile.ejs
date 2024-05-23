@@ -12,9 +12,8 @@
     <title>User Profile</title>
 </head>
 <body>
-    <%- include('../partials/menu'); %>
-
     <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
+    <%- include('../partials/header') %>
 
     <main class="container mt-5">
         <h1>User Profile</h1>

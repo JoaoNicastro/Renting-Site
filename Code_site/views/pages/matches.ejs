@@ -23,6 +23,7 @@
     </script>
 </head>
 <body>
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
     <%- include('../partials/header') %>
 
     <link rel="stylesheet" href="../css/matches.css">
@@ -32,8 +33,6 @@
             <button id="chats-btn">Chats</button>
         </div>
     </header>
-
-    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
 
     <div id="discover" style="display: block;">
         <h1>Your Top Matches</h1>

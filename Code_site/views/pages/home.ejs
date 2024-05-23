@@ -7,20 +7,45 @@
         // Declare the socket variable globally
         const socket = io();
     </script>
-    <script defer src = "../js/notification.js"></script>
+    <script defer src="../js/notification.js"></script>
     <link rel="stylesheet" href="../css/notification.css">
     <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/home.css">
 </head>
 
 <body>
-    <%- include('../partials/header') %>
-
     <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
 
-    <div id="roommate-request-banner" class="hidden">
-        <p id="roommate-request-message"></p>
-        <button id="accept-roommate-request">Accept</button>
-        <button id="deny-roommate-request">Deny</button>
+    <%- include('../partials/header') %>
+
+    <div class="container">
+        <h1 class="welcome-title">Welcome back, <span class="username"><%= user.username %></span></h1>
+        <div class="box-container">
+            <div class="box profile-box">
+                <a href="/profile" class="box-link">
+                    <span class="material-symbols-outlined">person</span>
+                    <h2>Profile</h2>
+                </a>
+            </div>
+            <div class="box matches-chats-box">
+                <a href="/matches" class="box-link">
+                    <span class="material-symbols-outlined">chat</span>
+                    <h2>Chats</h2>
+                </a>
+            </div>
+            <div class="box apartments-box">
+                <a href="/apartments" class="box-link">
+                    <span class="material-symbols-outlined">apartment</span>
+                    <h2>Apartments</h2>
+                </a>
+            </div>
+            <div class="box roommates-box">
+                <a href="/roommates" class="box-link">
+                    <span class="material-symbols-outlined">people</span>
+                    <h2>Roommates</h2>
+                </a>
+            </div>
+        </div>
     </div>
 </body>
 

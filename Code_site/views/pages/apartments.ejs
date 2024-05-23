@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/apartments.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script defer src="../js/notification.js"></script>
+    <title>Matched Apartments</title>
+</head>
+<body>
+    <div id="user-data" data-username="<%= user ? user.username : '' %>"></div>
+
+    <%- include('../partials/header') %>
+
+
+    <div class="container">
+        <h1>Matched Apartments</h1>
+        <div class="apartments-list">
+            <% if (apartments && apartments.length > 0) { %>
+                <% apartments.forEach(apartment => { %>
+                    <div class="apartment-card">
+                        <img src="<%= apartment.image_link %>" alt="<%= apartment.title %>">
+                        <h2><%= apartment.title %></h2>
+                        <p><strong>City:</strong> <%= apartment.city %></p>
+                        <p><strong>Address:</strong> <%= apartment.address %></p>
+                        <p><strong>Price:</strong> <%= apartment.price %></p>
+                        <p><strong>Size:</strong> <%= apartment.size %> sq m</p>
+                        <p><strong>Bedrooms:</strong> <%= apartment.bedrooms %></p>
+                        <p><strong>Furnished:</strong> <%= apartment.furnished ? 'Yes' : 'No' %></p>
+                        <a href="<%= apartment.link %>">View Apartment</a>
+                        <a href="<%= apartment.contact_link %>">Contact</a>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No matched apartments found.</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
