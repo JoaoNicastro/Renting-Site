@@ -630,7 +630,7 @@ app.post('/login', async (req, res) => {
       // If user not found
       if (!user) {
           res.locals.errorMessage = 'User with this email does not exist.';
-          return res.render('pages/login');
+          return res.render('pages/login', { errorMessage: res.locals.errorMessage });
       }
 
       // Check if password matches
@@ -638,7 +638,7 @@ app.post('/login', async (req, res) => {
       if (!match) {
           // Password doesn't match
           res.locals.errorMessage = 'Incorrect password';
-          return res.render('pages/login');
+          return res.render('pages/login', { errorMessage: res.locals.errorMessage });
       }
 
       // If all checks pass, save user details in session and redirect to /discover
@@ -648,7 +648,7 @@ app.post('/login', async (req, res) => {
   } catch (error) {
       // If there's a database or other error
       res.locals.errorMessage = 'An error occurred during login. Please try again later.';
-      res.render('pages/login');
+      res.render('pages/login', { errorMessage: res.locals.errorMessage });
   }
 });
 

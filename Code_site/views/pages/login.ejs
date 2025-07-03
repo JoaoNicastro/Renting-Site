@@ -233,6 +233,10 @@
 
             <h2 class="welcome" style="margin-top:1rem;">Welcome back!</h2>
 
+            <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                <div class="alert alert-danger" role="alert"><%= errorMessage %></div>
+            <% } %>
+
             <!-- login.ejs -->
 
             <form action="/login" method="POST">
